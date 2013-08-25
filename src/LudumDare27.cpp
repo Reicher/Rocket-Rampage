@@ -48,7 +48,7 @@ void DrawAllFuel(std::list<FuelPowerup> fuel)
 
 void fillSkyWithFuel(Content *content, sf::RenderWindow *app, std::list<FuelPowerup> &fuel)
 {
-	float distLayers = 700;
+	float distLayers = 1000;
 	float radius = 1000;
 
 	for(int layer = 1; layer < 100; layer++){
@@ -69,6 +69,7 @@ void init(Rocket &rocket, std::list<FuelPowerup> &fuel, Content *content, sf::Re
 {
 	rocket.m_x = 400;
 	rocket.m_y = 450;
+	rocket.m_r = 0;
 	rocket.m_fuelSec = sf::seconds(10.0);
 	rocket.stopAll();
 
@@ -81,6 +82,10 @@ int main()
 {
 	// Load Content
 	Content content;
+
+	content.m_mainTheme.play();
+	content.m_mainTheme.setLoop(true);
+	content.m_mainTheme.setVolume(75);
 
 	//init time things
 	srand(time(NULL));
@@ -120,7 +125,7 @@ int main()
 	InfoBox.setOutlineThickness(10);
 	InfoBox.setOutlineColor(sf::Color(250, 150, 100));
 	InfoBox.setPosition(150, 200);
-	sf::Text InfoText("Rocket Rampage\nWAD - move around\nQE - rotate\n\n(Space to start)", theFont, 40);
+	sf::Text InfoText("Rocket Rampage\n\nWAD - move around\nQE - rotate\n\n(Space to start)", theFont, 40);
 	InfoText.setColor(sf::Color::Black);
 	InfoText.setPosition(200, 250);
 
@@ -193,6 +198,8 @@ int main()
         window.draw(fuelBar);
         window.draw(heightText);
         if(!gameOn){
+        	InfoBox.setRotation(rocket.m_r);
+        	InfoText.setRotation(rocket.m_r);
         	window.draw(InfoBox);
         	window.draw(InfoText);
         }

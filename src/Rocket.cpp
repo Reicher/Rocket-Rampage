@@ -17,7 +17,7 @@ Rocket::Rocket(Content *content, sf::RenderWindow *app)
 , m_fy(0.0)
 , m_fuelSec(sf::seconds(10.0f))
 , m_mass(1.0)
-, m_speedMulti(30000)
+, m_speedMulti(10000)
 , m_r(0.0)
 , m_vr(0.0)
 , m_ar(0.0)
@@ -146,7 +146,7 @@ void Rocket::update(float dt, Planet *gravitySource = NULL)
 	m_vr += m_ar * dt;
 
 	//slowly take speed down
-	const double slowdown = 0.9999;
+	const double slowdown = 0.999;
 	m_vx *= slowdown * 1.0 - dt;
 	m_vy *= slowdown * 1.0 - dt;
 	m_vr *= slowdown * 1.0 - dt;

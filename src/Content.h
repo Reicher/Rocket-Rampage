@@ -17,5 +17,5 @@ public:
 	sf::SoundBuffer	 	m_takeFuelSound;
 	sf::SoundBuffer	 	m_thrustSound;
 
-	sf::Music 	 		m_testMusic;
+	sf::Music 	 		m_mainTheme;
 };

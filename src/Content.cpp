@@ -21,5 +21,5 @@ void Content::loadSounds()
 
 void Content::loadMusic()
 {
-	//m_testMusic.openFromFile("../Music/test.wav");
+	m_mainTheme.openFromFile("../Music/mainTheme.wav");
 }
