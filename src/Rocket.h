@@ -13,6 +13,8 @@ public:
 	void draw();
 	void update(float dt, Planet *gravitySource);
 
+	void fillFuel(sf::Time fuel);
+
 	float m_x, m_y;
 	float m_r;
 
@@ -33,7 +35,8 @@ private:
 	float m_vr, m_ar, m_fr;
 
 	float m_speedMulti;
-
-
 	float m_mass; //not used?
+
+	sf::Sound takeFuel;
+	sf::Sound thrust;
 };

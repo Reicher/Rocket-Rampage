@@ -10,11 +10,13 @@ Content::Content()
 void Content::loadTextures()
 {
 	m_rocketTex.loadFromFile("../Textures/Rocket.png");
+	m_fuelTex.loadFromFile("../Textures/Fuel.png");
 }
 
 void Content::loadSounds()
 {
-	//m_testSound.loadFromFile("../Sounds/test.wav");
+	m_takeFuelSound.loadFromFile("../Sounds/takeFuel.wav");
+	m_thrustSound.loadFromFile("../Sounds/thrust.wav");
 }
 
 void Content::loadMusic()

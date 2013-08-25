@@ -22,10 +22,14 @@ Rocket::Rocket(Content *content, sf::RenderWindow *app)
 , m_vr(0.0)
 , m_ar(0.0)
 , m_fr(0.0)
+, takeFuel(content->m_takeFuelSound)
+, thrust( content->m_thrustSound)
 {
 	m_mainSprite.setPosition(m_x, m_y);
 	m_mainSprite.setTextureRect(sf::IntRect(0, 0, 100, 100));
 	m_mainSprite.setOrigin(50.0, 50.0);
+
+	thrust.setVolume(40);
 }
 
 void Rocket::draw()
@@ -45,6 +49,7 @@ void Rocket::handleInput(float dt)
 
 	sf::Vector2<float > ori;
 
+	//Black magic
 	float rad = m_r * 0.0174532925;
 	ori.x = 0 * cos(rad) + 1.0 * sin(rad);
 	ori.y = 0 * sin(rad) - 1.0 * cos(rad);
@@ -56,6 +61,8 @@ void Rocket::handleInput(float dt)
 	if (Thrust && HaveFuel){
 		m_fx += 3.0 * ori.x * m_speedMulti;
 		m_fy += 3.0 * ori.y * m_speedMulti;
+		if(thrust.getStatus() != sf::Sound::Playing)
+			thrust.play();
 	}
 
 	ori.x = 1 * cos(rad);
@@ -73,7 +80,6 @@ void Rocket::handleInput(float dt)
 	{
 		m_fx -= 1.0 * ori.x * m_speedMulti;
 		m_fy -= 1.0 * ori.y * m_speedMulti;
-
 	}
 
 	// Clockwise rotation
@@ -92,7 +98,6 @@ void Rocket::handleInput(float dt)
 		m_fuelSec = sf::seconds(0.0);
 
 
-	//cout << "Fuel:" << m_fuelSec.asSeconds() << ", " << endl;
 
 }
 
@@ -150,4 +155,16 @@ void Rocket::update(float dt, Planet *gravitySource = NULL)
 
 	m_mainSprite.setPosition(m_x, m_y);
 	m_mainSprite.setRotation(m_r);
+}
+
+void Rocket::fillFuel(sf::Time fuel)
+{
+	m_fuelSec += fuel;
+
+	if(m_fuelSec.asSeconds() > 10)
+		m_fuelSec = sf::seconds(10.0);
+
+	//sound of taking barrel, should absolutely be in FuelPowerup
+	takeFuel.play();
+
 }

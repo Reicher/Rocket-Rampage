@@ -1,16 +1,72 @@
 #include <SFML/Graphics.hpp>
+#include <list>
+#include <iostream>
 
 #include "Content.h"
 #include "Rocket.h"
 #include "Planet.h"
+#include "FuelPowerup.h"
+
+#include <cstdlib>
 #include <sstream>
+#include <math.h>
 
 std::string Convert (float number){
   std::ostringstream buff;
   buff<<number;
   return buff.str();
 
-  }
+ }
+
+void TakeFuel(Rocket &rocket, std::list<FuelPowerup> &fuel)
+{
+	float threshold = 50;
+	std::list<FuelPowerup>::iterator it = fuel.begin();
+
+	for( it ; it != fuel.end(); it++)
+	{
+		double dist = sqrt( pow(rocket.m_x - it->getPos().x , 2) + pow( rocket.m_y - it->getPos().y, 2) );
+		if(dist <= threshold)
+		{
+			it->take();
+			rocket.fillFuel(sf::seconds(10.0));
+			fuel.erase(it);
+			break;
+		}
+	}
+}
+
+void DrawAllFuel(std::list<FuelPowerup> fuel)
+{
+	std::list<FuelPowerup>::iterator it = fuel.begin();
+
+	for( it ; it != fuel.end(); it++)
+	{
+		it->draw();
+	}
+}
+
+void fillSkyWithFuel(Content *content, sf::RenderWindow *app, std::list<FuelPowerup> &fuel)
+{
+	float distLayers = 500;
+
+	//for(int layer = 0; layer < 10; layer++){
+	//float circ = M_PI * pow(800, 2);
+
+	for(float rad = 0; rad < 2*M_PI; rad += 0.5)
+	{
+		float x = 400.0 + 800.0 * cos(rad);
+		float y = 900.0 + 800.0 * sin(rad);
+
+		fuel.push_back(FuelPowerup(content, app, sf::Vector2<int>(x, y)));
+	}
+
+
+//		sf::Vector2<int> pos(400+rand() % ) , 0);
+
+	//}
+
+}
 
 int main()
 {
@@ -28,6 +84,10 @@ int main()
 	Planet homePlanet(&content, &window, size, size + 500, size);
 	rocket.m_x = 400;
 	rocket.m_y = 450;
+
+	// Powerups
+	std::list<FuelPowerup> allFuel;
+	fillSkyWithFuel(&content, &window, allFuel);
 
 	// For time messuring
 	sf::Clock clock;
@@ -71,6 +131,7 @@ int main()
 
         // Update all
         rocket.update(dt, &homePlanet);
+        TakeFuel(rocket, allFuel);
 
         // Fuel bar ( encapsule later)
         fuelText.setPosition( window.mapPixelToCoords(sf::Vector2<int>(10, 10)) );
@@ -89,7 +150,6 @@ int main()
         heightText.setRotation(rocket.m_r);
         heightText.setString(Convert(height) + " Parsec");
 
-
         // draw everything here...
         homePlanet.draw();
         rocket.draw();
@@ -98,6 +158,7 @@ int main()
         window.draw(fuelBar);
         window.draw(heightText);
 
+        DrawAllFuel(allFuel);
 
         view.setCenter(sf::Vector2f(rocket.m_x, rocket.m_y));
         view.setRotation(rocket.m_r);

@@ -12,6 +12,10 @@ public:
 	void loadMusic();
 
 	sf::Texture  		m_rocketTex;
-	sf::SoundBuffer		m_testSound;
+	sf::Texture  		m_fuelTex;
+
+	sf::SoundBuffer	 	m_takeFuelSound;
+	sf::SoundBuffer	 	m_thrustSound;
+
 	sf::Music 	 		m_testMusic;
 };

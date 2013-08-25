@@ -16,6 +16,7 @@ public:
 
 	float m_x, m_y;
 	sf::CircleShape m_shape;
+
 private:
 
 	sf::RenderWindow  *m_pApp;
