@@ -18,9 +18,8 @@ int main()
 	Rocket rocket(&content, &window);
 	float size = 400;
 	Planet homePlanet(&content, &window, size, size + 500, size);
-	homePlanet.getClosestSurfacePoint(rocket.m_x, rocket.m_y);
-	rocket.m_x -= 50;
-	rocket.m_y -= 100;
+	rocket.m_x = 350;
+	rocket.m_y = 400;
 
 	sf::CircleShape temp(10);
 	temp.setFillColor(sf::Color(255, 0, 0));

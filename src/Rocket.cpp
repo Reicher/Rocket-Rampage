@@ -1,5 +1,6 @@
 #include "Rocket.h"
 
+
 #include "iostream"
 using namespace std;
 
@@ -17,10 +18,14 @@ Rocket::Rocket(Content *content, sf::RenderWindow *app)
 , m_fuelSec(sf::seconds(100.0f))
 , m_mass(1.0)
 , m_speedMulti(30000)
-, m_landed(false)
+, m_r(0.0)
+, m_vr(0.0)
+, m_ar(0.0)
+, m_fr(0.0)
 {
 	m_mainSprite.setPosition(m_x, m_y);
 	m_mainSprite.setTextureRect(sf::IntRect(0, 0, 100, 100));
+	m_mainSprite.setOrigin(50.0, 50.0);
 }
 
 void Rocket::draw()
@@ -33,22 +38,54 @@ void Rocket::handleInput(float dt)
 	bool Thrust = sf::Keyboard::isKeyPressed(sf::Keyboard::W);
 	bool LeftBooster = sf::Keyboard::isKeyPressed(sf::Keyboard::A);
 	bool RightBooster = sf::Keyboard::isKeyPressed(sf::Keyboard::D);
+	bool CWrotation = sf::Keyboard::isKeyPressed(sf::Keyboard::E);
+	bool CCWrotation = sf::Keyboard::isKeyPressed(sf::Keyboard::Q);
+
 	bool HaveFuel = m_fuelSec > sf::seconds(0.0);
 
+	sf::Vector2<float > ori;
+
+	float rad = m_r * 0.0174532925;
+	ori.x = 0 * cos(rad) + 1.0 * sin(rad);
+	ori.y = 0 * sin(rad) - 1.0 * cos(rad);
+
+
+	//cout << "angle: " << rad << ", Ori: " << ori.x << ", " << ori.y << endl;
+
 	//Thrust
-	if (Thrust && HaveFuel)
-		m_fy -= 3.0 * m_speedMulti;
+	if (Thrust && HaveFuel){
+		m_fx += 3.0 * ori.x * m_speedMulti;
+		m_fy += 3.0 * ori.y * m_speedMulti;
+	}
+
+	ori.x = 1 * cos(rad);
+	ori.y = 1 * sin(rad);
 
 	// Left strafe
 	if (RightBooster && HaveFuel)
-		m_fx += 1.0 * m_speedMulti;
+	{
+		m_fx += 1.0 * ori.x * m_speedMulti;
+		m_fy += 1.0 * ori.y * m_speedMulti;
+	}
 
 	// Right strafe
 	if (LeftBooster && HaveFuel)
-		m_fx -= 1.0 * m_speedMulti;
+	{
+		m_fx -= 1.0 * ori.x * m_speedMulti;
+		m_fy -= 1.0 * ori.y * m_speedMulti;
+
+	}
+
+	// Clockwise rotation
+	if(CWrotation)
+		m_fr += 1.0 * m_speedMulti;
+
+	// Counter Clockwise rotation
+	if(CCWrotation)
+		m_fr -= 1.0 * m_speedMulti;
 
 	// If Fuel should be consumed
-	if( Thrust || LeftBooster || RightBooster)
+	if( Thrust || LeftBooster || RightBooster || CWrotation || CCWrotation)
 		m_fuelSec -= sf::seconds(dt);
 
 	if(m_fuelSec < sf::seconds(0.0))
@@ -82,18 +119,14 @@ void Rocket::update(float dt, Planet *gravitySource = NULL)
 	const double slowdown = 0.9999;
 	m_fx = 0.0;
 	m_fy = 0.0;
-
-	 if( !handleLlanding( gravitySource ) )
-		//handleGravity(dt, gravitySource );
+	m_fr = 0.0;
 
 	handleInput(dt);
-
-	cout << "Force: " << m_fy << ", ";
-
 
 	//Calculate acceleration
 	m_ax = m_fx / m_mass * dt;
 	m_ay = m_fy / m_mass * dt;
+	m_ar = m_fr / m_mass * dt;
 
 	// Calculate speed
 	if(m_ax || m_ay){
@@ -103,44 +136,18 @@ void Rocket::update(float dt, Planet *gravitySource = NULL)
 		m_vx *= slowdown * 1.0 - dt;
 		m_vy *= slowdown * 1.0 - dt;
 	}
-	//cout << "Speed: " << m_vx << ", ";
+
+	//rotation
+	if(m_ar)
+		m_vr += m_ar * dt;
+	else
+		m_vr *= slowdown * 1.0 - dt;
 
 	// Calculate position
-	if(m_vx || m_vy)
-	{
-		m_x += m_vx * dt;
-		m_y += m_vy * dt;
-	}
-	//cout << "x: " << m_x;
-	//cout << " y: " << m_y;
+	m_x += m_vx * dt;
+	m_y += m_vy * dt;
+	m_r += m_vr * dt;
 
-
-	//cout << endl;
 	m_mainSprite.setPosition(m_x, m_y);
-}
-
-bool Rocket::handleLlanding(Planet *gravitySource)
-{
-	float vX = m_x + 5+- gravitySource->m_x;
-	float vY = m_y + 100 - gravitySource->m_y;
-	float length = sqrt(pow(vX, 2) + pow(vY,  2)) - gravitySource->m_shape.getRadius();
-
-	if(length < 1.0)
-	{
-		if(!m_landed)
-		{
-			m_vx = m_vy = 0;
-		}
-		cout << "Landed!" << endl;;
-
-		if(m_vx > 100 || m_vy > 100)
-			cout << "DEAD!";
-
-		m_landed = true;
-	}else{
-		m_landed = false;
-		cout << "in space" << endl;
-	}
-
-	return m_landed;
+	m_mainSprite.setRotation(m_r);
 }

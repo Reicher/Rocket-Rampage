@@ -19,7 +19,6 @@ public:
 private:
 	void handleInput(float dt);
 	void handleGravity(float dt, Planet *gravitySource);
-	bool handleLlanding(Planet *gravitySource);
 
 	sf::RenderWindow  *m_pApp;
 
@@ -27,9 +26,10 @@ private:
 	float m_ax, m_ay;
 	float m_fx, m_fy;
 
-	float m_speedMulti;
+	//Rotation
+	float m_r, m_vr, m_ar, m_fr;
 
-	bool m_landed;
+	float m_speedMulti;
 
 	sf::Time m_fuelSec;
 	float m_mass; //not used?
