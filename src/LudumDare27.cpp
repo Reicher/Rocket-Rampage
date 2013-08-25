@@ -3,6 +3,14 @@
 #include "Content.h"
 #include "Rocket.h"
 #include "Planet.h"
+#include <sstream>
+
+std::string Convert (float number){
+  std::ostringstream buff;
+  buff<<number;
+  return buff.str();
+
+  }
 
 int main()
 {
@@ -25,7 +33,15 @@ int main()
 	sf::Clock clock;
 	float dt = 0;
 
-	sf::RectangleShape fueelBar(sf::Vector2f(200, 40));
+	// For height meter (add to content later)
+	sf::Font theFont;
+	theFont.loadFromFile("../Fonts/SECRCODE.TTF");
+	sf::Text heightText("", theFont, 30);
+	heightText.setColor(sf::Color::White);
+
+	sf::RectangleShape fuelBar(sf::Vector2f(200, 40));
+	sf::Text fuelText("Fuel ", theFont, 30);
+	fuelText.setColor(sf::Color::White);
 
     // run the program as long as the window is open
     while (window.isOpen())
@@ -56,22 +72,34 @@ int main()
         // Update all
         rocket.update(dt, &homePlanet);
 
+        // Fuel bar ( encapsule later)
+        fuelText.setPosition( window.mapPixelToCoords(sf::Vector2<int>(10, 10)) );
+        fuelText.setRotation(rocket.m_r);
+
+        fuelBar.setPosition( window.mapPixelToCoords(sf::Vector2<int>(70, 10)) );
+        fuelBar.setRotation(rocket.m_r);
+        fuelBar.setSize(sf::Vector2f(rocket.m_fuelSec.asSeconds()*20.0, 40));
+        fuelBar.setFillColor(sf::Color( 255-rocket.m_fuelSec.asSeconds()*20.0,
+        								 rocket.m_fuelSec.asSeconds()*20.0 - 255,
+        								 0));
+        // Height meter
+        int height = sqrt( pow(homePlanet.m_x - rocket.m_x , 2) + pow(homePlanet.m_y - rocket.m_y , 2) );
+        heightText.setPosition( window.mapPixelToCoords( sf::Vector2<int>(600, 10)) );
+        heightText.setRotation(rocket.m_r);
+        heightText.setString(Convert(height));
+
+
         // draw everything here...
         homePlanet.draw();
         rocket.draw();
 
-        // GUI stuff
-        sf::Vector2<int> fuelPos(10, 10);
-        fueelBar.setPosition( window.mapPixelToCoords(fuelPos) );
-        fueelBar.setRotation(rocket.m_r);
-        fueelBar.setSize(sf::Vector2f(rocket.m_fuelSec.asSeconds()*20.0, 40));
-        fueelBar.setFillColor(sf::Color( 255-rocket.m_fuelSec.asSeconds()*20.0,
-        								 rocket.m_fuelSec.asSeconds()*20.0 - 255, 0));
-        window.draw(fueelBar);
+        window.draw(fuelText);
+        window.draw(fuelBar);
+        window.draw(heightText);
+
 
         view.setCenter(sf::Vector2f(rocket.m_x, rocket.m_y));
         view.setRotation(rocket.m_r);
-
         window.setView(view);
 
         // end the current frame
