@@ -14,6 +14,7 @@ public:
 	void update(float dt, Planet *gravitySource);
 
 	void fillFuel(sf::Time fuel);
+	void stopAll();
 
 	float m_x, m_y;
 	float m_r;

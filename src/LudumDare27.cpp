@@ -23,7 +23,7 @@ void TakeFuel(Rocket &rocket, std::list<FuelPowerup> &fuel)
 	float threshold = 50;
 	std::list<FuelPowerup>::iterator it = fuel.begin();
 
-	for( it ; it != fuel.end(); it++)
+	for( ; it != fuel.end(); it++)
 	{
 		double dist = sqrt( pow(rocket.m_x - it->getPos().x , 2) + pow( rocket.m_y - it->getPos().y, 2) );
 		if(dist <= threshold)
@@ -40,7 +40,7 @@ void DrawAllFuel(std::list<FuelPowerup> fuel)
 {
 	std::list<FuelPowerup>::iterator it = fuel.begin();
 
-	for( it ; it != fuel.end(); it++)
+	for( ; it != fuel.end(); it++)
 	{
 		it->draw();
 	}
@@ -48,23 +48,32 @@ void DrawAllFuel(std::list<FuelPowerup> fuel)
 
 void fillSkyWithFuel(Content *content, sf::RenderWindow *app, std::list<FuelPowerup> &fuel)
 {
-	float distLayers = 500;
+	float distLayers = 700;
+	float radius = 1000;
 
-	//for(int layer = 0; layer < 10; layer++){
-	//float circ = M_PI * pow(800, 2);
+	for(int layer = 1; layer < 100; layer++){
+		radius += distLayers;
 
-	for(float rad = 0; rad < 2*M_PI; rad += 0.5)
-	{
-		float x = 400.0 + 800.0 * cos(rad);
-		float y = 900.0 + 800.0 * sin(rad);
+		for(float rad = 0; rad < 2*M_PI; rad += (800.0 / radius) )
+		{
+			float x = (400.0 + radius * cos(rad)) + (rand() % 400);
+			float y = (900.0 + radius * sin(rad)) + (rand() % 400);;
 
-		fuel.push_back(FuelPowerup(content, app, sf::Vector2<int>(x, y)));
+			fuel.push_back(FuelPowerup(content, app, sf::Vector2<int>(x, y)));
+		}
 	}
 
+}
 
-//		sf::Vector2<int> pos(400+rand() % ) , 0);
+void init(Rocket &rocket, std::list<FuelPowerup> &fuel, Content *content, sf::RenderWindow *app)
+{
+	rocket.m_x = 400;
+	rocket.m_y = 450;
+	rocket.m_fuelSec = sf::seconds(10.0);
+	rocket.stopAll();
 
-	//}
+	fuel.clear();
+	fillSkyWithFuel(content, app, fuel);
 
 }
 
@@ -72,6 +81,9 @@ int main()
 {
 	// Load Content
 	Content content;
+
+	//init time things
+	srand(time(NULL));
 
     // create the window
     sf::RenderWindow window(sf::VideoMode(800, 600), "Ludum dare #27");
@@ -82,16 +94,16 @@ int main()
 	Rocket rocket(&content, &window);
 	float size = 400;
 	Planet homePlanet(&content, &window, size, size + 500, size);
-	rocket.m_x = 400;
-	rocket.m_y = 450;
 
 	// Powerups
 	std::list<FuelPowerup> allFuel;
-	fillSkyWithFuel(&content, &window, allFuel);
+
+	init(rocket, allFuel, &content, &window);
 
 	// For time messuring
 	sf::Clock clock;
 	float dt = 0;
+	bool gameOn = false;
 
 	// For height meter (add to content later)
 	sf::Font theFont;
@@ -103,6 +115,16 @@ int main()
 	sf::Text fuelText("Fuel ", theFont, 30);
 	fuelText.setColor(sf::Color::White);
 
+	//Start box thingy
+	sf::RectangleShape InfoBox(sf::Vector2f(500, 300));
+	InfoBox.setOutlineThickness(10);
+	InfoBox.setOutlineColor(sf::Color(250, 150, 100));
+	InfoBox.setPosition(150, 200);
+	sf::Text InfoText("Rocket Rampage\nWAD - move around\nQE - rotate\n\n(Space to start)", theFont, 40);
+	InfoText.setColor(sf::Color::Black);
+	InfoText.setPosition(200, 250);
+
+	int height = 0;
     // run the program as long as the window is open
     while (window.isOpen())
     {
@@ -120,7 +142,17 @@ int main()
                 {
                 	window.close();
                 }
+                if (event.key.code == sf::Keyboard::Space)
+                {
+                	gameOn = true;
+                }
 			}
+        }
+
+        if(rocket.m_fuelSec == sf::seconds(0.0) && gameOn){
+        	InfoText.setString("Game Over!\n\nScore: " + Convert(height) + "\n(Space to restart)");
+        	init(rocket, allFuel, &content, &window);
+        	gameOn = false;
         }
 
         // clear the window with black color
@@ -128,6 +160,8 @@ int main()
 
         //get time elapsed
         dt = clock.restart().asSeconds();
+        if(!gameOn)
+        	dt = 0;
 
         // Update all
         rocket.update(dt, &homePlanet);
@@ -144,8 +178,9 @@ int main()
         								 rocket.m_fuelSec.asSeconds()*20.0 - 255,
         								 0));
         // Height meter
-        int height = 	sqrt( pow(homePlanet.m_x - rocket.m_x , 2) + pow(homePlanet.m_y - rocket.m_y , 2) )
+        height = 	sqrt( pow(homePlanet.m_x - rocket.m_x , 2) + pow(homePlanet.m_y - rocket.m_y , 2) )
         				- homePlanet.m_shape.getRadius() - 50;
+
         heightText.setPosition( window.mapPixelToCoords( sf::Vector2<int>(600, 10)) );
         heightText.setRotation(rocket.m_r);
         heightText.setString(Convert(height) + " Parsec");
@@ -157,6 +192,10 @@ int main()
         window.draw(fuelText);
         window.draw(fuelBar);
         window.draw(heightText);
+        if(!gameOn){
+        	window.draw(InfoBox);
+        	window.draw(InfoText);
+        }
 
         DrawAllFuel(allFuel);
 

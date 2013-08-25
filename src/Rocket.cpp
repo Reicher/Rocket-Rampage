@@ -37,6 +37,11 @@ void Rocket::draw()
 	m_pApp->draw(m_mainSprite);
 }
 
+void Rocket::stopAll()
+{
+	m_fx = m_fy = m_fr = m_ax = m_ay = m_ar = m_vx = m_vy = m_vr = 0.0;
+}
+
 void Rocket::handleInput(float dt)
 {
 	bool Thrust = sf::Keyboard::isKeyPressed(sf::Keyboard::W);
@@ -121,12 +126,12 @@ void Rocket::handleGravity(float dt, Planet *gravitySource)
 
 void Rocket::update(float dt, Planet *gravitySource = NULL)
 {
-	const double slowdown = 0.9999;
 	m_fx = 0.0;
 	m_fy = 0.0;
 	m_fr = 0.0;
 
-	handleInput(dt);
+	if(dt)
+		handleInput(dt);
 
 	//Calculate acceleration
 	m_ax = m_fx / m_mass * dt;
@@ -134,19 +139,17 @@ void Rocket::update(float dt, Planet *gravitySource = NULL)
 	m_ar = m_fr / m_mass * dt;
 
 	// Calculate speed
-	if(m_ax || m_ay){
-		m_vx += m_ax * dt;
-		m_vy += m_ay * dt;
-	}else{
-		m_vx *= slowdown * 1.0 - dt;
-		m_vy *= slowdown * 1.0 - dt;
-	}
+	m_vx += m_ax * dt;
+	m_vy += m_ay * dt;
 
 	//rotation
-	if(m_ar)
-		m_vr += m_ar * dt;
-	else
-		m_vr *= slowdown * 1.0 - dt;
+	m_vr += m_ar * dt;
+
+	//slowly take speed down
+	const double slowdown = 0.9999;
+	m_vx *= slowdown * 1.0 - dt;
+	m_vy *= slowdown * 1.0 - dt;
+	m_vr *= slowdown * 1.0 - dt;
 
 	// Calculate position
 	m_x += m_vx * dt;

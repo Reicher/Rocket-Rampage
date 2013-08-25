@@ -6,6 +6,7 @@ FuelPowerup::FuelPowerup(Content *contnent, sf::RenderWindow *app, sf::Vector2<i
 {
 	m_sprite.setRotation(rand() % 361 );
 	m_sprite.setPosition(pos.x, pos.y);
+	m_sprite.setOrigin(50.0, 50.0);
 	m_sprite.setScale(sf::Vector2f(0.5, 0.5));
 }
 
