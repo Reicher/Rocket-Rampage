@@ -21,12 +21,11 @@ int main()
 	rocket.m_x = 350;
 	rocket.m_y = 400;
 
-	sf::CircleShape temp(10);
-	temp.setFillColor(sf::Color(255, 0, 0));
-
 	// For time messuring
 	sf::Clock clock;
 	float dt = 0;
+
+	sf::RectangleShape fueelBar(sf::Vector2f(200, 40));
 
     // run the program as long as the window is open
     while (window.isOpen())
@@ -61,9 +60,18 @@ int main()
         homePlanet.draw();
         rocket.draw();
 
-        window.draw(temp);
+        // GUI stuff
+        sf::Vector2<int> fuelPos(10, 10);
+        fueelBar.setPosition( window.mapPixelToCoords(fuelPos) );
+        fueelBar.setRotation(rocket.m_r);
+        fueelBar.setSize(sf::Vector2f(rocket.m_fuelSec.asSeconds()*20.0, 40));
+        fueelBar.setFillColor(sf::Color( 255-rocket.m_fuelSec.asSeconds()*20.0,
+        								 rocket.m_fuelSec.asSeconds()*20.0 - 255, 0));
+        window.draw(fueelBar);
 
         view.setCenter(sf::Vector2f(rocket.m_x, rocket.m_y));
+        view.setRotation(rocket.m_r);
+
         window.setView(view);
 
         // end the current frame

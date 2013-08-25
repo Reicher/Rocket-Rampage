@@ -14,7 +14,10 @@ public:
 	void update(float dt, Planet *gravitySource);
 
 	float m_x, m_y;
+	float m_r;
+
 	sf::Sprite m_mainSprite;
+	sf::Time m_fuelSec;
 
 private:
 	void handleInput(float dt);
@@ -27,10 +30,10 @@ private:
 	float m_fx, m_fy;
 
 	//Rotation
-	float m_r, m_vr, m_ar, m_fr;
+	float m_vr, m_ar, m_fr;
 
 	float m_speedMulti;
 
-	sf::Time m_fuelSec;
+
 	float m_mass; //not used?
 };
