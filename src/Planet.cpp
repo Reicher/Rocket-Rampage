@@ -11,7 +11,7 @@ Planet::Planet(Content *contnent, sf::RenderWindow *app, float pX, float pY, flo
 {
 	m_shape.setPosition(m_x-size, m_y-size);
 	m_shape.setFillColor(sf::Color(180, 140, 100));
-	m_shape.setOutlineThickness(10);
+	m_shape.setOutlineThickness(-10);
 	m_shape.setOutlineColor(sf::Color(180, 255, 200));
 
 	if(!size)

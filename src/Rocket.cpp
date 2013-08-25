@@ -77,11 +77,11 @@ void Rocket::handleInput(float dt)
 	}
 
 	// Clockwise rotation
-	if(CWrotation)
+	if(CWrotation && HaveFuel)
 		m_fr += 1.0 * m_speedMulti;
 
 	// Counter Clockwise rotation
-	if(CCWrotation)
+	if(CCWrotation && HaveFuel)
 		m_fr -= 1.0 * m_speedMulti;
 
 	// If Fuel should be consumed

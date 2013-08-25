@@ -26,8 +26,8 @@ int main()
 	Rocket rocket(&content, &window);
 	float size = 400;
 	Planet homePlanet(&content, &window, size, size + 500, size);
-	rocket.m_x = 350;
-	rocket.m_y = 400;
+	rocket.m_x = 400;
+	rocket.m_y = 450;
 
 	// For time messuring
 	sf::Clock clock;
@@ -83,10 +83,11 @@ int main()
         								 rocket.m_fuelSec.asSeconds()*20.0 - 255,
         								 0));
         // Height meter
-        int height = sqrt( pow(homePlanet.m_x - rocket.m_x , 2) + pow(homePlanet.m_y - rocket.m_y , 2) );
+        int height = 	sqrt( pow(homePlanet.m_x - rocket.m_x , 2) + pow(homePlanet.m_y - rocket.m_y , 2) )
+        				- homePlanet.m_shape.getRadius() - 50;
         heightText.setPosition( window.mapPixelToCoords( sf::Vector2<int>(600, 10)) );
         heightText.setRotation(rocket.m_r);
-        heightText.setString(Convert(height));
+        heightText.setString(Convert(height) + " Parsec");
 
 
         // draw everything here...
