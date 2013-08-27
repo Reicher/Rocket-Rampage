@@ -17,7 +17,7 @@ Rocket::Rocket(Content *content, sf::RenderWindow *app)
 , m_fy(0.0)
 , m_fuelSec(sf::seconds(10.0f))
 , m_mass(1.0)
-, m_speedMulti(10000)
+, m_speedMulti(2)
 , m_r(0.0)
 , m_vr(0.0)
 , m_ar(0.0)
@@ -139,11 +139,11 @@ void Rocket::update(float dt, Planet *gravitySource = NULL)
 	m_ar = m_fr / m_mass * dt;
 
 	// Calculate speed
-	m_vx += m_ax * dt;
-	m_vy += m_ay * dt;
+	m_vx += m_ax;
+	m_vy += m_ay;
 
 	//rotation
-	m_vr += m_ar * dt;
+	m_vr += m_ar;
 
 	//slowly take speed down
 	const double slowdown = 0.999;
@@ -152,9 +152,9 @@ void Rocket::update(float dt, Planet *gravitySource = NULL)
 	m_vr *= slowdown * 1.0 - dt;
 
 	// Calculate position
-	m_x += m_vx * dt;
-	m_y += m_vy * dt;
-	m_r += m_vr * dt;
+	m_x += m_vx;
+	m_y += m_vy;
+	m_r += m_vr;
 
 	m_mainSprite.setPosition(m_x, m_y);
 	m_mainSprite.setRotation(m_r);
