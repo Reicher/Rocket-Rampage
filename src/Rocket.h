@@ -16,11 +16,11 @@ public:
 	void fillFuel(sf::Time fuel);
 	void stopAll();
 
-	float m_x, m_y;
-	float m_r;
-
 	sf::Sprite m_mainSprite;
 	sf::Time m_fuelSec;
+
+	float m_x, m_y;
+	float m_r;
 
 private:
 	void handleInput(float dt);

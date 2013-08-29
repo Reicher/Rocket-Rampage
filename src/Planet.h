@@ -5,7 +5,6 @@
 #include "Content.h"
 #include <math.h>
 
-
 class Planet
 {
 public:
@@ -14,8 +13,9 @@ public:
 	void getClosestSurfacePoint(float &x, float &y);
 	float getMass();
 
-	float m_x, m_y;
 	sf::CircleShape m_shape;
+
+	float m_x, m_y;
 
 private:
 

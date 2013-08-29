@@ -5,9 +5,9 @@ using namespace std;
 
 Planet::Planet(Content *contnent, sf::RenderWindow *app, float pX, float pY, float size)
 : m_shape(size)
-, m_pApp(app)
 , m_x(pX)
 , m_y(pY)
+, m_pApp(app)
 {
 	m_shape.setPosition(m_x-size, m_y-size);
 	m_shape.setFillColor(sf::Color(180, 140, 100));
