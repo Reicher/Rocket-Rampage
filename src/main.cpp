@@ -6,6 +6,7 @@
 #include "Rocket.h"
 #include "Planet.h"
 #include "FuelCollection.h"
+#include "InfoBox.h"
 
 #include <cstdlib>
 #include <sstream>
@@ -32,7 +33,8 @@ int main()
 	// Load Content
 	Content content;
 
-	//content.m_mainTheme.play();
+	// Music
+	content.m_mainTheme.play();
 	content.m_mainTheme.setLoop(true);
 	content.m_mainTheme.setVolume(75);
 
@@ -41,7 +43,6 @@ int main()
 
     // create the window
     sf::RenderWindow window(sf::VideoMode(800, 600), "Rocket Rampage");
-
     sf::View view;
 
     //Create player/Rocket/HomePlanet
@@ -61,23 +62,15 @@ int main()
 	bool gameOn = false;
 
 	// For height meter (add to content later)
-	sf::Font theFont;
-	theFont.loadFromFile("../Fonts/SECRCODE.TTF");
-	sf::Text heightText("", theFont, 30);
+	sf::Text heightText("", content.m_standardFont, 30);
 	heightText.setColor(sf::Color::White);
 
 	sf::RectangleShape fuelBar(sf::Vector2f(200, 40));
-	sf::Text fuelText("Fuel ", theFont, 30);
+	sf::Text fuelText("Fuel ", content.m_standardFont, 30);
 	fuelText.setColor(sf::Color::White);
 
 	//Start box thingy
-	sf::RectangleShape InfoBox(sf::Vector2f(500, 300));
-	InfoBox.setOutlineThickness(10);
-	InfoBox.setOutlineColor(sf::Color(250, 150, 100));
-	InfoBox.setPosition(-200, -550);
-	sf::Text InfoText("Rocket Rampage\n\nWAD - move around\nQE - rotate\n\n(Space to start)", theFont, 40);
-	InfoText.setColor(sf::Color::Black);
-	InfoText.setPosition(-150, -550);
+	InfoBox infoBox( &window, &content, sf::Vector2f(-200, -550));
 
 	int height = 0;
     // run the program as long as the window is open
@@ -105,7 +98,7 @@ int main()
         }
 
         if(rocket.m_fuelSec == sf::seconds(0.0) && gameOn){
-        	InfoText.setString("Game Over!\n\nScore: " + Convert(height) + "\n(Space to restart)");
+        	infoBox.setGameOver(height);
         	init(rocket);
         	fuelCollection.init();
         	gameOn = false;
@@ -137,8 +130,7 @@ int main()
         								 rocket.m_fuelSec.asSeconds()*20.0 - 255,
         								 0));
         // Height meter
-        height = 	sqrt( pow(homePlanet.m_x - rocket.m_x , 2) + pow(homePlanet.m_y - rocket.m_y , 2) )
-        				- homePlanet.m_shape.getRadius() - 40;
+        height = 	sqrt( pow(rocket.m_x , 2) + pow(rocket.m_y , 2) ) - homePlanet.m_shape.getRadius() - 40;
 
         heightText.setPosition( window.mapPixelToCoords( sf::Vector2<int>(600, 10)) );
         heightText.setRotation(rocket.m_r);
@@ -151,12 +143,9 @@ int main()
         window.draw(fuelText);
         window.draw(fuelBar);
         window.draw(heightText);
-        if(!gameOn){
-        	InfoBox.setRotation(rocket.m_r);
-        	InfoText.setRotation(rocket.m_r);
-        	window.draw(InfoBox);
-        	window.draw(InfoText);
-        }
+
+        if(!gameOn)
+        	infoBox.draw();
 
         window.draw(fuelCollection);
 

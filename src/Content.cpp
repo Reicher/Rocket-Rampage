@@ -5,6 +5,7 @@ Content::Content()
 	loadTextures();
 	loadSounds();
 	loadMusic();
+	loadFonts();
 }
 
 void Content::loadTextures()
@@ -22,4 +23,9 @@ void Content::loadSounds()
 void Content::loadMusic()
 {
 	m_mainTheme.openFromFile("../Music/mainTheme.wav");
+}
+
+void Content::loadFonts()
+{
+	m_standardFont.loadFromFile("../Fonts/SECRCODE.TTF");
 }
