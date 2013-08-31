@@ -62,8 +62,8 @@ void fillSkyWithFuel(Content *content, sf::RenderWindow *app, std::list<FuelPowe
 
 		for(float rad = 0; rad < 2*M_PI; rad += (800.0 / radius) )
 		{
-			float x = (400.0 + radius * cos(rad)) + (rand() % 400);
-			float y = (900.0 + radius * sin(rad)) + (rand() % 400);;
+			float x = (radius * cos(rad)) + (rand() % 400);
+			float y = (radius * sin(rad)) + (rand() % 400);;
 
 			fuel.push_back(FuelPowerup(content, app, sf::Vector2<int>(x, y)));
 		}
@@ -72,8 +72,8 @@ void fillSkyWithFuel(Content *content, sf::RenderWindow *app, std::list<FuelPowe
 
 void init(Rocket &rocket, std::list<FuelPowerup> &fuel, Content *content, sf::RenderWindow *app)
 {
-	rocket.m_x = 400;
-	rocket.m_y = 450;
+	rocket.m_x = 0;
+	rocket.m_y = -440;
 	rocket.m_r = 0;
 	rocket.m_fuelSec = sf::seconds(10.0);
 	rocket.stopAll();
@@ -88,7 +88,7 @@ int main()
 	// Load Content
 	Content content;
 
-	content.m_mainTheme.play();
+	//content.m_mainTheme.play();
 	content.m_mainTheme.setLoop(true);
 	content.m_mainTheme.setVolume(75);
 
@@ -103,7 +103,7 @@ int main()
     //Create player/Rocket/HomePlanet
 	Rocket rocket(&content, &window);
 	float size = 400;
-	Planet homePlanet(&content, &window, size, size + 500, size);
+	Planet homePlanet(&content, &window, 0, 0, size);
 
 	// Powerups
 	std::list<FuelPowerup> allFuel;
@@ -129,10 +129,10 @@ int main()
 	sf::RectangleShape InfoBox(sf::Vector2f(500, 300));
 	InfoBox.setOutlineThickness(10);
 	InfoBox.setOutlineColor(sf::Color(250, 150, 100));
-	InfoBox.setPosition(150, 200);
+	InfoBox.setPosition(-200, -550);
 	sf::Text InfoText("Rocket Rampage\n\nWAD - move around\nQE - rotate\n\n(Space to start)", theFont, 40);
 	InfoText.setColor(sf::Color::Black);
-	InfoText.setPosition(200, 250);
+	InfoText.setPosition(-150, -550);
 
 	int height = 0;
     // run the program as long as the window is open
@@ -189,7 +189,7 @@ int main()
         								 0));
         // Height meter
         height = 	sqrt( pow(homePlanet.m_x - rocket.m_x , 2) + pow(homePlanet.m_y - rocket.m_y , 2) )
-        				- homePlanet.m_shape.getRadius() - 50;
+        				- homePlanet.m_shape.getRadius() - 40;
 
         heightText.setPosition( window.mapPixelToCoords( sf::Vector2<int>(600, 10)) );
         heightText.setRotation(rocket.m_r);

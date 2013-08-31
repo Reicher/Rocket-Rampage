@@ -14,6 +14,7 @@ public:
 	float getMass();
 
 	sf::CircleShape m_shape;
+	sf::CircleShape m_atmosphere;
 
 	float m_x, m_y;
 
