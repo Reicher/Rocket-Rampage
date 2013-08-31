@@ -20,9 +20,8 @@ Rocket::Rocket(Content *content, sf::RenderWindow *app)
 , m_vr(0.0)
 , m_ar(0.0)
 , m_fr(0.0)
-, m_speedMulti(2)
+, m_speedMulti(1)
 , m_mass(1.0)
-, takeFuel(content->m_takeFuelSound)
 , thrust( content->m_thrustSound)
 {
 	m_mainSprite.setPosition(m_x, m_y);
@@ -58,9 +57,6 @@ void Rocket::handleInput(float dt)
 	float rad = m_r * 0.0174532925;
 	ori.x = 0 * cos(rad) + 1.0 * sin(rad);
 	ori.y = 0 * sin(rad) - 1.0 * cos(rad);
-
-
-	//cout << "angle: " << rad << ", Ori: " << ori.x << ", " << ori.y << endl;
 
 	//Thrust
 	if (Thrust && HaveFuel){
@@ -101,8 +97,6 @@ void Rocket::handleInput(float dt)
 
 	if(m_fuelSec < sf::seconds(0.0))
 		m_fuelSec = sf::seconds(0.0);
-
-
 
 }
 
@@ -166,8 +160,4 @@ void Rocket::fillFuel(sf::Time fuel)
 
 	if(m_fuelSec.asSeconds() > 10)
 		m_fuelSec = sf::seconds(10.0);
-
-	//sound of taking barrel, should absolutely be in FuelPowerup
-	takeFuel.play();
-
 }

@@ -217,7 +217,6 @@ int main()
 
         // end the current frame
         window.display();
-        std::cout << "Im at " << rocket.m_x << " " << rocket.m_y << std::endl;
     }
 
     return 0;

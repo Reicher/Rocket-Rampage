@@ -11,9 +11,13 @@ class FuelPowerup
 public:
 	FuelPowerup(Content *contnent, sf::RenderWindow *app, sf::Vector2<int> pos);
 	void take();
-	void draw();
+	void draw() const;
+	bool ReadyToBeRemoved() const;
 	sf::Vector2<float> getPos() { return m_sprite.getPosition(); }
 private:
-	sf::Sprite m_sprite;
 	sf::RenderWindow *m_pApp;
+	sf::Sprite m_sprite;
+
+	sf::Sound takeFuel;
+	bool m_taken;
 };

@@ -38,6 +38,5 @@ private:
 	float m_speedMulti;
 	float m_mass; //not used?
 
-	sf::Sound takeFuel;
 	sf::Sound thrust;
 };
