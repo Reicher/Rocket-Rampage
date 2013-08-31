@@ -10,6 +10,7 @@ public:
 	void loadTextures();
 	void loadSounds();
 	void loadMusic();
+	void loadFonts();
 
 	sf::Texture  		m_rocketTex;
 	sf::Texture  		m_fuelTex;
@@ -18,4 +19,6 @@ public:
 	sf::SoundBuffer	 	m_thrustSound;
 
 	sf::Music 	 		m_mainTheme;
+
+	sf::Font			m_standardFont;
 };
