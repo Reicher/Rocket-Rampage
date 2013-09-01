@@ -90,7 +90,7 @@ int main()
 	Content content;
 
 	// Music
-	content.m_mainTheme.play();
+	//content.m_mainTheme.play();
 	content.m_mainTheme.setLoop(true);
 	content.m_mainTheme.setVolume(75);
 

@@ -20,8 +20,8 @@ Rocket::Rocket(Content *content, sf::RenderWindow *app)
 , m_vr(0.0)
 , m_ar(0.0)
 , m_fr(0.0)
-, m_speedMulti(1)
-, m_mass(1.0)
+, m_speedMulti(2)
+, m_mass(11.0)
 , thrust( content->m_thrustSound)
 {
 	m_mainSprite.setPosition(m_x, m_y);
@@ -105,17 +105,21 @@ void Rocket::handleGravity(float dt, Planet *gravitySource)
 	if(gravitySource == NULL)
 		return;
 
-	float vX = m_x - gravitySource->m_x;
-	float vY = m_y - gravitySource->m_y;
-	float length = sqrt(pow(vX, 2) + pow(vY,  2));
+	float vX = gravitySource->m_x - m_x;
+	float vY = gravitySource->m_y - m_y;
+	float r = sqrt(pow(vX, 2) + pow(vY,  2));
 
-	float gravConst = -2.0;
-	float ix = vX / length * gravConst;
-	float iy = vY / length * gravConst;
+	// Newtons universal law of gravity!
+	// http://en.wikipedia.org/wiki/Newton%27s_law_of_universal_gravitation
+	// With a not so realistic constant G
+	float G = 1000.0;
+	float Force = G * (m_mass * gravitySource->getMass()) /  pow(r, 2);
+
+	float ix = vX / r * Force;
+	float iy = vY / r * Force;
 
 	m_fx += ix * dt * m_speedMulti;
 	m_fy += iy * dt * m_speedMulti;
-
 }
 
 void Rocket::update(float dt, Planet *gravitySource = NULL)
@@ -124,8 +128,13 @@ void Rocket::update(float dt, Planet *gravitySource = NULL)
 	m_fy = 0.0;
 	m_fr = 0.0;
 
+	// Fuel is heavy!
+	m_mass = 1 + m_fuelSec.asSeconds();
+
 	if(dt)
 		handleInput(dt);
+
+	handleGravity(dt, gravitySource);
 
 	//Calculate acceleration
 	m_ax = m_fx / m_mass * dt;
