@@ -1,8 +1,8 @@
 #include <memory>
-#include "../model/model.h"
+#include "../model/IObserver.h"
 
 //! View of the game
-class View
+class View : public IObserver
 {
 public:
 	View();
@@ -14,6 +14,8 @@ public:
 
 	//! Is the view open
 	bool isOpen();
+
+	void notify( std::string what );
 
 private:
 

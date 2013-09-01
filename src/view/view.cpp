@@ -16,6 +16,11 @@ public:
 		return true;
 	}
 
+	void notify( std::string what )
+	{
+
+	}
+
 };
 
 View::View()
@@ -35,4 +40,9 @@ void View::update()
 bool View::isOpen()
 {
 	return m_apImpl->isOpen();
+}
+
+void View::notify( std::string what )
+{
+	m_apImpl->notify( what );
 }

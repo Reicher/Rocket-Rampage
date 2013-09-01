@@ -1,7 +1,8 @@
 #include <memory>
+#include "IObservable.h"
 
 //! Model for the game
-class Model
+class Model : public IObservable
 {
 public:
 	Model();
@@ -13,6 +14,8 @@ public:
 
 	//! Updates the model
 	void update();
+
+	void addObserver( IObserver* pObserver );
 
 private:
 
