@@ -1,17 +1,29 @@
 #pragma once
 
-#include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
-#include "Content.h"
+#include "SFML/Graphics/Drawable.hpp"
+#include "SFML/Graphics/RenderTarget.hpp"
+#include "SFML/Graphics/CircleShape.hpp"
+
+#include "SFML/Graphics/Sprite.hpp"
+#include "SFML/System/Vector2.hpp"
+
 #include <math.h>
 
-class Planet
+namespace sf {
+class Texture;
+}
+
+
+class Planet: public sf::Drawable
 {
 public:
-	Planet(Content *content, sf::RenderWindow *app, float pX, float pY, float size = 0);
-	void draw();
-	void getClosestSurfacePoint(float &x, float &y);
-	float getMass();
+	Planet(const sf::Vector2f& initialPosition, float size = 0);
+	Planet(const sf::Texture& planetTexture, const sf::Vector2f& initialPosition, float size = 0);
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+
+	float getMass() const;
+	float getSize() const;
+	sf::Vector2f getPosition() const;
 
 	sf::CircleShape m_shape;
 	sf::CircleShape m_atmosphere;
@@ -19,7 +31,12 @@ public:
 	float m_x, m_y;
 
 private:
+	void initAtmosphere();
 
-	sf::RenderWindow  *m_pApp;
+	sf::Sprite 		m_sprite;
+
+	bool m_textured;
+	float m_size;
+	int m_smooth;
 
 };

@@ -11,7 +11,11 @@ Content::Content()
 void Content::loadTextures()
 {
 	m_rocketTex.loadFromFile("../Textures/Rocket.png");
+	m_rocketTex.setSmooth(true);
+
 	m_fuelTex.loadFromFile("../Textures/Fuel.png");
+	m_homePlanet.loadFromFile("../Textures/HomePlanet.png");
+	m_homePlanet.setSmooth(true);
 }
 
 void Content::loadSounds()

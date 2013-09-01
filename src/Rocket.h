@@ -25,6 +25,8 @@ public:
 private:
 	void handleInput(float dt);
 	void handleGravity(float dt, Planet *gravitySource);
+	bool touchDown(Planet *gravitySource);
+	void slowdown(float dt);
 
 	sf::RenderWindow  *m_pApp;
 
@@ -39,4 +41,6 @@ private:
 	float m_mass; //not used?
 
 	sf::Sound thrust;
+
+	bool m_slowdown;
 };

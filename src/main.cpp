@@ -5,7 +5,7 @@
 #include "Content.h"
 #include "Rocket.h"
 #include "Planet.h"
-#include "FuelPowerup.h"
+#include "FuelCollection.h"
 #include "InfoBox.h"
 
 #include <cstdlib>
@@ -19,69 +19,13 @@ std::string Convert (float number){
 
  }
 
-void TakeFuel(Rocket &rocket, std::list<FuelPowerup> &fuel)
-{
-	float threshold = 50;
-	std::list<FuelPowerup>::iterator it = fuel.begin();
-
-	for( ; it != fuel.end(); it++)
-	{
-		if(it->ReadyToBeRemoved())
-		{
-			fuel.erase(it);
-			break; //shouldnt continue be enough? give segmentation error
-		}
-
-		double dist = sqrt( pow(rocket.m_x - it->getPos().x , 2) + pow( rocket.m_y - it->getPos().y, 2) );
-		if(dist <= threshold)
-		{
-			it->take();
-			rocket.fillFuel(sf::seconds(10.0));
-		}
-
-
-	}
-}
-
-void DrawAllFuel(std::list<FuelPowerup> fuel)
-{
-	std::list<FuelPowerup>::iterator it = fuel.begin();
-
-	for( ; it != fuel.end(); it++)
-	{
-		it->draw();
-	}
-}
-
-void fillSkyWithFuel(Content *content, sf::RenderWindow *app, std::list<FuelPowerup> &fuel)
-{
-	float distLayers = 1000;
-	float radius = 1000;
-
-	for(int layer = 1; layer < 10; layer++){
-		radius += distLayers;
-
-		for(float rad = 0; rad < 2*M_PI; rad += (800.0 / radius) )
-		{
-			float x = (radius * cos(rad)) + (rand() % 400);
-			float y = (radius * sin(rad)) + (rand() % 400);;
-
-			fuel.push_back(FuelPowerup(content, app, sf::Vector2<int>(x, y)));
-		}
-	}
-}
-
-void init(Rocket &rocket, std::list<FuelPowerup> &fuel, Content *content, sf::RenderWindow *app)
+void init(Rocket &rocket)
 {
 	rocket.m_x = 0;
 	rocket.m_y = -440;
 	rocket.m_r = 0;
 	rocket.m_fuelSec = sf::seconds(10.0);
 	rocket.stopAll();
-
-	fuel.clear();
-	fillSkyWithFuel(content, app, fuel);
-
 }
 
 int main()
@@ -104,12 +48,13 @@ int main()
     //Create player/Rocket/HomePlanet
 	Rocket rocket(&content, &window);
 	float size = 400;
-	Planet homePlanet(&content, &window, 0, 0, size);
+	Planet homePlanet(content.m_homePlanet, sf::Vector2f(0.0, 0.0), size);
 
-	// Powerups
-	std::list<FuelPowerup> allFuel;
+	init(rocket);
 
-	init(rocket, allFuel, &content, &window);
+	// Create fuel
+	FuelCollection fuelCollection(content.m_fuelTex, content.m_takeFuelSound);
+	fuelCollection.init();
 
 	// For time messuring
 	sf::Clock clock;
@@ -154,7 +99,8 @@ int main()
 
         if(rocket.m_fuelSec == sf::seconds(0.0) && gameOn){
         	infoBox.setGameOver(height);
-        	init(rocket, allFuel, &content, &window);
+        	init(rocket);
+        	fuelCollection.init();
         	gameOn = false;
         }
 
@@ -168,7 +114,10 @@ int main()
 
         // Update all
         rocket.update(dt, &homePlanet);
-        TakeFuel(rocket, allFuel);
+        if (fuelCollection.isAnyFuelHit(rocket.m_mainSprite.getPosition()))
+        {
+        	rocket.fillFuel(sf::seconds(10.0));
+        }
 
         // Fuel bar ( encapsule later)
         fuelText.setPosition( window.mapPixelToCoords(sf::Vector2<int>(10, 10)) );
@@ -188,7 +137,8 @@ int main()
         heightText.setString(Convert(height) + " Parsec");
 
         // draw everything here...
-        homePlanet.draw();
+        window.draw(homePlanet);
+        //homePlanet.draw();
         rocket.draw();
 
         window.draw(fuelText);
@@ -198,7 +148,7 @@ int main()
         if(!gameOn)
         	infoBox.draw();
 
-        DrawAllFuel(allFuel);
+        window.draw(fuelCollection);
 
         view.setCenter(sf::Vector2f(rocket.m_x, rocket.m_y));
         view.setRotation(rocket.m_r);

@@ -23,6 +23,7 @@ Rocket::Rocket(Content *content, sf::RenderWindow *app)
 , m_speedMulti(2)
 , m_mass(11.0)
 , thrust( content->m_thrustSound)
+, m_slowdown(true)
 {
 	m_mainSprite.setPosition(m_x, m_y);
 	m_mainSprite.setTextureRect(sf::IntRect(0, 0, 100, 100));
@@ -112,14 +113,15 @@ void Rocket::handleGravity(float dt, Planet *gravitySource)
 	// Newtons universal law of gravity!
 	// http://en.wikipedia.org/wiki/Newton%27s_law_of_universal_gravitation
 	// With a not so realistic constant G
-	float G = 1000.0;
+	float G = 10.0;
 	float Force = G * (m_mass * gravitySource->getMass()) /  pow(r, 2);
 
 	float ix = vX / r * Force;
 	float iy = vY / r * Force;
 
-	m_fx += ix * dt * m_speedMulti;
-	m_fy += iy * dt * m_speedMulti;
+	m_fx += ix * m_speedMulti;
+	m_fy += iy * m_speedMulti;
+	// Is fluctuating? why :S
 }
 
 void Rocket::update(float dt, Planet *gravitySource = NULL)
@@ -134,7 +136,8 @@ void Rocket::update(float dt, Planet *gravitySource = NULL)
 	if(dt)
 		handleInput(dt);
 
-	handleGravity(dt, gravitySource);
+	if( !touchDown(gravitySource) )
+		handleGravity(dt, gravitySource);
 
 	//Calculate acceleration
 	m_ax = m_fx / m_mass * dt;
@@ -148,11 +151,8 @@ void Rocket::update(float dt, Planet *gravitySource = NULL)
 	//rotation
 	m_vr += m_ar;
 
-	//slowly take speed down
-	const double slowdown = 0.999;
-	m_vx *= slowdown * 1.0 - dt;
-	m_vy *= slowdown * 1.0 - dt;
-	m_vr *= slowdown * 1.0 - dt;
+	if(m_slowdown)
+		slowdown(dt);
 
 	// Calculate position
 	m_x += m_vx;
@@ -163,10 +163,36 @@ void Rocket::update(float dt, Planet *gravitySource = NULL)
 	m_mainSprite.setRotation(m_r);
 }
 
+void Rocket::slowdown(float dt)
+{
+	//slowly take speed down
+	const double slowdown = 0.999;
+	m_vx *= slowdown * 1.0 - dt;
+	m_vy *= slowdown * 1.0 - dt;
+	m_vr *= slowdown * 1.0 - dt;
+}
+
 void Rocket::fillFuel(sf::Time fuel)
 {
 	m_fuelSec += fuel;
 
 	if(m_fuelSec.asSeconds() > 10)
 		m_fuelSec = sf::seconds(10.0);
+}
+
+bool Rocket::touchDown(Planet *gravitySource = NULL)
+{
+	if(gravitySource == NULL)
+		return false;
+
+	float distance = sqrt( pow(m_x - gravitySource->m_x, 2) + pow(m_y - gravitySource->m_y , 2) );
+
+	bool landed = distance <= (gravitySource->getSize() + 40);
+
+	if(landed){
+		m_vx = -m_vx * 0.50;
+		m_vy = -m_vy * 0.50;
+	}
+
+	return landed;
 }

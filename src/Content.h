@@ -14,6 +14,7 @@ public:
 
 	sf::Texture  		m_rocketTex;
 	sf::Texture  		m_fuelTex;
+	sf::Texture			m_homePlanet;
 
 	sf::SoundBuffer	 	m_takeFuelSound;
 	sf::SoundBuffer	 	m_thrustSound;
