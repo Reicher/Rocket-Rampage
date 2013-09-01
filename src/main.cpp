@@ -113,7 +113,7 @@ int main()
 
         // Update all
         rocket.update(dt, &homePlanet);
-        if (fuelCollection.isAnyFuelHit(rocket.m_mainSprite.getPosition()))
+        if (fuelCollection.isAnyFuelHit(rocket.getPosition()))
         {
         	rocket.fillFuel(sf::seconds(10.0));
         }

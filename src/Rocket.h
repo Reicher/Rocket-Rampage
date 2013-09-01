@@ -19,7 +19,6 @@ public:
 	sf::Vector2f getPosition() const;
 	void setPosition(sf::Vector2f pos);
 
-	sf::Sprite m_mainSprite;
 	sf::Time m_fuelSec;
 
 	float m_r;
@@ -32,6 +31,7 @@ private:
 
 	sf::RenderWindow  *m_pApp;
 
+	sf::Sprite m_mainSprite;
 
 	sf::Vector2f m_p;
 	sf::Vector2f m_v;

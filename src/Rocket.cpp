@@ -5,10 +5,10 @@
 using namespace std;
 
 Rocket::Rocket(Content *content, sf::RenderWindow *app)
-: m_mainSprite(content->m_rocketTex)
-, m_fuelSec(sf::seconds(10.0f))
+: m_fuelSec(sf::seconds(10.0f))
 , m_r(0.0)
 , m_pApp(app)
+, m_mainSprite(content->m_rocketTex)
 , m_p(350, 0)
 , m_v(0, 0)
 , m_a(0, 0)
