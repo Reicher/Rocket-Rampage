@@ -16,10 +16,12 @@ public:
 	void fillFuel(sf::Time fuel);
 	void stopAll();
 
+	sf::Vector2f getPosition() const;
+	void setPosition(sf::Vector2f pos);
+
 	sf::Sprite m_mainSprite;
 	sf::Time m_fuelSec;
 
-	float m_x, m_y;
 	float m_r;
 
 private:
@@ -30,9 +32,11 @@ private:
 
 	sf::RenderWindow  *m_pApp;
 
-	float m_vx, m_vy;
-	float m_ax, m_ay;
-	float m_fx, m_fy;
+
+	sf::Vector2f m_p;
+	sf::Vector2f m_v;
+	sf::Vector2f m_a;
+	sf::Vector2f m_f;
 
 	//Rotation
 	float m_vr, m_ar, m_fr;

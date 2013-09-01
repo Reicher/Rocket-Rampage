@@ -7,16 +7,12 @@ using namespace std;
 Rocket::Rocket(Content *content, sf::RenderWindow *app)
 : m_mainSprite(content->m_rocketTex)
 , m_fuelSec(sf::seconds(10.0f))
-, m_x(350)
-, m_y(0)
 , m_r(0.0)
 , m_pApp(app)
-, m_vx(0.0)
-, m_vy(0.0)
-, m_ax(0.0)
-, m_ay(0.0)
-, m_fx(0.0)
-, m_fy(0.0)
+, m_p(350, 0)
+, m_v(0, 0)
+, m_a(0, 0)
+, m_f(0, 0)
 , m_vr(0.0)
 , m_ar(0.0)
 , m_fr(0.0)
@@ -25,7 +21,7 @@ Rocket::Rocket(Content *content, sf::RenderWindow *app)
 , thrust( content->m_thrustSound)
 , m_slowdown(true)
 {
-	m_mainSprite.setPosition(m_x, m_y);
+	m_mainSprite.setPosition(m_p);
 	m_mainSprite.setTextureRect(sf::IntRect(0, 0, 100, 100));
 	m_mainSprite.setOrigin(50.0, 50.0);
 
@@ -39,7 +35,7 @@ void Rocket::draw()
 
 void Rocket::stopAll()
 {
-	m_fx = m_fy = m_fr = m_ax = m_ay = m_ar = m_vx = m_vy = m_vr = 0.0;
+	m_f = m_a = m_v = sf::Vector2f(0, 0);
 }
 
 void Rocket::handleInput(float dt)
@@ -61,8 +57,8 @@ void Rocket::handleInput(float dt)
 
 	//Thrust
 	if (Thrust && HaveFuel){
-		m_fx += 3.0 * ori.x * m_speedMulti;
-		m_fy += 3.0 * ori.y * m_speedMulti;
+		m_f.x += 3.0 * ori.x * m_speedMulti;
+		m_f.y += 3.0 * ori.y * m_speedMulti;
 		if(thrust.getStatus() != sf::Sound::Playing)
 			thrust.play();
 	}
@@ -73,15 +69,15 @@ void Rocket::handleInput(float dt)
 	// Left strafe
 	if (RightBooster && HaveFuel)
 	{
-		m_fx += 1.0 * ori.x * m_speedMulti;
-		m_fy += 1.0 * ori.y * m_speedMulti;
+		m_f.x += 1.0 * ori.x * m_speedMulti;
+		m_f.y += 1.0 * ori.y * m_speedMulti;
 	}
 
 	// Right strafe
 	if (LeftBooster && HaveFuel)
 	{
-		m_fx -= 1.0 * ori.x * m_speedMulti;
-		m_fy -= 1.0 * ori.y * m_speedMulti;
+		m_f.x -= 1.0 * ori.x * m_speedMulti;
+		m_f.y -= 1.0 * ori.y * m_speedMulti;
 	}
 
 	// Clockwise rotation
@@ -99,6 +95,7 @@ void Rocket::handleInput(float dt)
 	if(m_fuelSec < sf::seconds(0.0))
 		m_fuelSec = sf::seconds(0.0);
 
+
 }
 
 void Rocket::handleGravity(float dt, Planet *gravitySource)
@@ -106,32 +103,26 @@ void Rocket::handleGravity(float dt, Planet *gravitySource)
 	if(gravitySource == NULL)
 		return;
 
-	float vX = gravitySource->m_x - m_x;
-	float vY = gravitySource->m_y - m_y;
-	float r = sqrt(pow(vX, 2) + pow(vY,  2));
+	sf::Vector2f V = gravitySource->getPosition() - m_p;
+	float r = sqrt(pow(V.x, 2) + pow(V.y,  2));
 
 	// Newtons universal law of gravity!
 	// http://en.wikipedia.org/wiki/Newton%27s_law_of_universal_gravitation
 	// With a not so realistic constant G
-	float G = 10.0;
-	float Force = G * (m_mass * gravitySource->getMass()) /  pow(r, 2);
+	float G = 10.0f;
+	float Force = G * (m_mass * gravitySource->getMass()) /  pow(r, 2.0f);
 
-	float ix = vX / r * Force;
-	float iy = vY / r * Force;
-
-	m_fx += ix * m_speedMulti;
-	m_fy += iy * m_speedMulti;
-	// Is fluctuating? why :S
+	sf::Vector2f unitV = (V / r) * Force;
+	m_f += unitV * m_speedMulti;
 }
 
 void Rocket::update(float dt, Planet *gravitySource = NULL)
 {
-	m_fx = 0.0;
-	m_fy = 0.0;
+	m_f = sf::Vector2f(0.0, 0.0);
 	m_fr = 0.0;
 
 	// Fuel is heavy!
-	m_mass = 1 + m_fuelSec.asSeconds();
+	m_mass = 1.0 + m_fuelSec.asSeconds() ;
 
 	if(dt)
 		handleInput(dt);
@@ -140,13 +131,12 @@ void Rocket::update(float dt, Planet *gravitySource = NULL)
 		handleGravity(dt, gravitySource);
 
 	//Calculate acceleration
-	m_ax = m_fx / m_mass * dt;
-	m_ay = m_fy / m_mass * dt;
-	m_ar = m_fr / m_mass * dt;
+	m_a = m_f / m_mass;
+
+	m_ar = m_fr / m_mass;
 
 	// Calculate speed
-	m_vx += m_ax;
-	m_vy += m_ay;
+	m_v += m_a;
 
 	//rotation
 	m_vr += m_ar;
@@ -155,21 +145,19 @@ void Rocket::update(float dt, Planet *gravitySource = NULL)
 		slowdown(dt);
 
 	// Calculate position
-	m_x += m_vx;
-	m_y += m_vy;
-	m_r += m_vr;
+	m_p += m_v * dt;
+	m_r += m_vr * dt;
 
-	m_mainSprite.setPosition(m_x, m_y);
+	m_mainSprite.move( m_v * dt);
 	m_mainSprite.setRotation(m_r);
 }
 
 void Rocket::slowdown(float dt)
 {
 	//slowly take speed down
-	const double slowdown = 0.999;
-	m_vx *= slowdown * 1.0 - dt;
-	m_vy *= slowdown * 1.0 - dt;
-	m_vr *= slowdown * 1.0 - dt;
+	float slowdown = 0.999;
+	m_v =  m_v * slowdown * (1.0f - dt);
+	m_vr *= slowdown * (1.0 - dt);
 }
 
 void Rocket::fillFuel(sf::Time fuel)
@@ -185,14 +173,24 @@ bool Rocket::touchDown(Planet *gravitySource = NULL)
 	if(gravitySource == NULL)
 		return false;
 
-	float distance = sqrt( pow(m_x - gravitySource->m_x, 2) + pow(m_y - gravitySource->m_y , 2) );
+	float distance = sqrt( pow(m_p.x - gravitySource->getPosition().x, 2) + pow(m_p.y - gravitySource->getPosition().y , 2) );
 
 	bool landed = distance <= (gravitySource->getSize() + 40);
 
 	if(landed){
-		m_vx = -m_vx * 0.50;
-		m_vy = -m_vy * 0.50;
+		m_v = m_v * -0.70f;
 	}
 
 	return landed;
+}
+
+void Rocket::setPosition(sf::Vector2f pos)
+{
+	m_p = pos;
+	m_mainSprite.setPosition(m_p);
+}
+
+sf::Vector2f Rocket::getPosition() const
+{
+	return m_p;
 }

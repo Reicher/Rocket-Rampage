@@ -21,8 +21,7 @@ std::string Convert (float number){
 
 void init(Rocket &rocket)
 {
-	rocket.m_x = 0;
-	rocket.m_y = -440;
+	rocket.setPosition(sf::Vector2f(0.0f, -440.0f));
 	rocket.m_r = 0;
 	rocket.m_fuelSec = sf::seconds(10.0);
 	rocket.stopAll();
@@ -130,7 +129,7 @@ int main()
         								 rocket.m_fuelSec.asSeconds()*20.0 - 255,
         								 0));
         // Height meter
-        height = 	sqrt( pow(rocket.m_x , 2) + pow(rocket.m_y , 2) ) - homePlanet.m_shape.getRadius() - 40;
+        height = 	sqrt( pow(rocket.getPosition().x , 2) + pow(rocket.getPosition().y , 2) ) - homePlanet.getSize() - 40;
 
         heightText.setPosition( window.mapPixelToCoords( sf::Vector2<int>(600, 10)) );
         heightText.setRotation(rocket.m_r);
@@ -150,7 +149,7 @@ int main()
 
         window.draw(fuelCollection);
 
-        view.setCenter(sf::Vector2f(rocket.m_x, rocket.m_y));
+        view.setCenter(rocket.getPosition());
         view.setRotation(rocket.m_r);
         window.setView(view);
 

@@ -72,3 +72,8 @@ float Planet::getSize() const
 {
 	return m_size;
 }
+
+sf::Vector2f Planet::getPosition() const
+{
+	return sf::Vector2f(m_x, m_y);
+}

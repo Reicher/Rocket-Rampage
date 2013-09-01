@@ -25,13 +25,15 @@ public:
 	float getSize() const;
 	sf::Vector2f getPosition() const;
 
-	sf::CircleShape m_shape;
-	sf::CircleShape m_atmosphere;
 
-	float m_x, m_y;
 
 private:
 	void initAtmosphere();
+
+	float m_x, m_y;
+
+	sf::CircleShape m_shape;
+	sf::CircleShape m_atmosphere;
 
 	sf::Sprite 		m_sprite;
 
