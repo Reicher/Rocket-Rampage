@@ -16,7 +16,7 @@ Rocket::Rocket(Content *content, sf::RenderWindow *app)
 , m_vr(0.0)
 , m_ar(0.0)
 , m_fr(0.0)
-, m_speedMulti(2)
+, m_speedMulti(1)
 , m_mass(11.0)
 , thrust( content->m_thrustSound)
 , m_slowdown(true)
@@ -48,7 +48,7 @@ void Rocket::handleInput(float dt)
 
 	bool HaveFuel = m_fuelSec > sf::seconds(0.0);
 
-	sf::Vector2<float > ori;
+	sf::Vector2f ori;
 
 	//Black magic
 	float rad = m_r * 0.0174532925;
@@ -57,11 +57,12 @@ void Rocket::handleInput(float dt)
 
 	//Thrust
 	if (Thrust && HaveFuel){
-		m_f.x += 3.0 * ori.x * m_speedMulti;
-		m_f.y += 3.0 * ori.y * m_speedMulti;
+		m_f += ori * 3.0f * m_speedMulti;
 		if(thrust.getStatus() != sf::Sound::Playing)
 			thrust.play();
 	}
+	else
+		thrust.stop();
 
 	ori.x = 1 * cos(rad);
 	ori.y = 1 * sin(rad);
@@ -69,15 +70,13 @@ void Rocket::handleInput(float dt)
 	// Left strafe
 	if (RightBooster && HaveFuel)
 	{
-		m_f.x += 1.0 * ori.x * m_speedMulti;
-		m_f.y += 1.0 * ori.y * m_speedMulti;
+		m_f += ori * 1.0f * m_speedMulti;
 	}
 
 	// Right strafe
 	if (LeftBooster && HaveFuel)
 	{
-		m_f.x -= 1.0 * ori.x * m_speedMulti;
-		m_f.y -= 1.0 * ori.y * m_speedMulti;
+		m_f -= ori * 1.0f * m_speedMulti;
 	}
 
 	// Clockwise rotation

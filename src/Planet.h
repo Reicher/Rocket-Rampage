@@ -25,8 +25,6 @@ public:
 	float getSize() const;
 	sf::Vector2f getPosition() const;
 
-
-
 private:
 	void initAtmosphere();
 

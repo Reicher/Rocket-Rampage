@@ -1,5 +1,6 @@
 #include "Model.h"
 #include "IObserver.h"
+#include "IManager.h"
 #include "actors/FuelActor.h"
 #include <list>
 #include <vector>
@@ -57,6 +58,10 @@ private:
 
 	Observers m_observers;
 
+	typedef ::std::list<IManager*> Managers;
+
+	Managers m_managers;
+
 	ActorId m_uniqueActorId;
 
 	void notify( std::string what, IActor* pActor )
@@ -77,6 +82,11 @@ private:
 		notify( "addFuel", pActor );
 
 		m_actors.push_back( pActor );
+	}
+
+	void addFuelManager()
+	{
+
 	}
 };
 
