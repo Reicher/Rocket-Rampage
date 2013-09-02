@@ -1,8 +1,6 @@
 Rocket Rampage
 ===========
 
-My ludum dare #27 entry. 
-
 ### Objectives
 Get as far away from your homeplanet as possible before your fuel runs out and you float around in space in eternity. 
 Pick up fuel barrels scattered around in cosmos to extend your journey.
