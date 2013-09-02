@@ -12,6 +12,9 @@
 #include <sstream>
 #include <math.h>
 
+#include "model/Model.h"
+#include "view/View.h"
+
 std::string Convert (float number){
   std::ostringstream buff;
   buff<<number;
@@ -29,6 +32,35 @@ void init(Rocket &rocket)
 
 int main()
 {
+	if( false ) // Set to true to use the new structure
+	{
+		::model::Model model;
+
+		Content content;
+
+		::view::View view( &content );
+
+		view.init();
+
+		model.addObserver( &view );
+
+		model.init();
+
+		sf::Clock clock;
+
+		float dt( 0 );
+
+		while( true ) // Replace with something that checks if the window is closed.
+		{
+			model.update( dt );
+
+			view.update();
+
+			dt = clock.restart().asSeconds();
+		}
+
+	}
+
 	// Load Content
 	Content content;
 

@@ -1,13 +1,21 @@
+#pragma once
+
 #include <memory>
 #include "../model/IObserver.h"
+#include "../Content.h"
+
+namespace view {
 
 //! View of the game
-class View : public IObserver
+class View : public ::model::IObserver
 {
 public:
-	View();
+	View( Content* pContent );
 
 	~View();
+
+	//! Initiates the view.
+	void init();
 
 	//! Updates the view
 	void update();
@@ -15,7 +23,7 @@ public:
 	//! Is the view open
 	bool isOpen();
 
-	void notify( std::string what );
+	void notify( std::string what, ::model::IActor* pActor );
 
 private:
 
@@ -24,3 +32,5 @@ private:
 	std::auto_ptr<Impl> m_apImpl;
 
 };
+
+}
