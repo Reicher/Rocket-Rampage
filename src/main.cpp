@@ -59,6 +59,7 @@ int main()
 			dt = clock.restart().asSeconds();
 		}
 
+		exit( 1 );
 	}
 
 	// Load Content

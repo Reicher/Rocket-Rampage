@@ -35,7 +35,7 @@ public:
 
 	bool isOpen()
 	{
-		return true;
+		return m_apRenderWindow->isOpen();
 	}
 
 	void notify( std::string what, ::model::IActor* pActor )

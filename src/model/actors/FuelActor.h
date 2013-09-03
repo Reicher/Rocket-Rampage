@@ -9,7 +9,7 @@ class FuelActor : public IActor
 {
 public:
 
-	FuelActor( ActorId id );
+	FuelActor( ActorId id, double x, double y );
 
 	~FuelActor();
 

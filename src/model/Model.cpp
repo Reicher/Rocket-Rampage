@@ -1,7 +1,8 @@
 #include "Model.h"
 #include "IObserver.h"
 #include "IManager.h"
-#include "actors/FuelActor.h"
+#include "FuelManager.h"
+#include "UniqueId.h"
 #include <list>
 #include <vector>
 
@@ -10,16 +11,17 @@ namespace model {
 class Model::Impl
 {
 public:
-	Impl()
-	: m_actors()
+	Impl( IObservable* pObservable )
+	: m_pObservable( pObservable )
 	, m_observers()
-	, m_uniqueActorId( 1000 )
+	, m_managers()
+	, m_apUniqueId( new UniqueId( 100 ) )
 	{
 	}
 
 	void init()
 	{
-		addFuel();
+		createManagers();
 	}
 
 	void update( float dt )
@@ -29,8 +31,8 @@ public:
 			return;
 		}
 
-		for( Actors::iterator it( m_actors.begin() );
-			 it != m_actors.end();
+		for( Managers::iterator it( m_managers.begin() );
+			 it != m_managers.end();
 			 ++it )
 		{
 			( *it )->update( dt );
@@ -43,16 +45,19 @@ public:
 		m_observers.push_back( pObserver );
 	}
 
-	ActorId createId()
+	void notifyObservers( ::std::string what, IActor* pActor )
 	{
-		return m_uniqueActorId++;
+		for( Observers::iterator it( m_observers.begin() );
+			 it != m_observers.end();
+			 ++it )
+		{
+			( *it )->notify( what, pActor );
+		}
 	}
 
 private:
 
-	typedef ::std::vector<IActor*> Actors;
-
-	Actors m_actors;
+	IObservable* m_pObservable;
 
 	typedef ::std::list<IObserver*> Observers;
 
@@ -62,37 +67,18 @@ private:
 
 	Managers m_managers;
 
-	ActorId m_uniqueActorId;
+	::std::auto_ptr<IUniqueId> m_apUniqueId;
 
-	void notify( std::string what, IActor* pActor )
+	void createManagers()
 	{
-		for( Observers::iterator it( m_observers.begin() );
-			 it != m_observers.end();
-			 ++it )
-		{
-			( *it )->notify( what, pActor );
-		}
-
-	}
-
-	void addFuel()
-	{
-		IActor* pActor( new FuelActor( createId() ) );
-
-		notify( "addFuel", pActor );
-
-		m_actors.push_back( pActor );
-	}
-
-	void addFuelManager()
-	{
-
+		m_managers.push_back( new FuelManager( m_pObservable, m_apUniqueId.get() ) );
 	}
 };
 
 Model::Model()
-: m_apImpl( new Impl )
+: m_apImpl()
 {
+	m_apImpl.reset( new Impl( this ) );
 }
 
 Model::~Model()
@@ -114,9 +100,9 @@ void Model::addObserver( IObserver* pObserver )
 	m_apImpl->addObserver( pObserver );
 }
 
-ActorId Model::createId()
+void Model::notifyObservers( ::std::string what, IActor* pActor )
 {
-	return m_apImpl->createId();
+	m_apImpl->notifyObservers( what, pActor );
 }
 
 }

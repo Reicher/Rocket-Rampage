@@ -5,17 +5,17 @@ namespace model {
 class FuelActor::Impl
 {
 public:
-	Impl( ActorId id )
+	Impl( ActorId id, double x, double y )
 	: m_id( id )
-	, x( 0 )
-	, y( 0 )
+	, m_x( x )
+	, m_y( y )
 	{
 	}
 
 	void update( double dt )
 	{
-		x += dt;
-		y += dt;
+		m_x += dt;
+		m_y += dt;
 	}
 
 	ActorId getId()
@@ -25,12 +25,12 @@ public:
 
 	double getX()
 	{
-		return x;
+		return m_x;
 	}
 
 	double getY()
 	{
-		return y;
+		return m_y;
 	}
 
 	double getRotation()
@@ -42,11 +42,13 @@ private:
 
 	ActorId m_id;
 
-	double x,y;
+	double m_x;
+
+	double m_y;
 };
 
-FuelActor::FuelActor( ActorId id )
-: m_apImpl( new Impl( id ) )
+FuelActor::FuelActor( ActorId id, double x, double y )
+: m_apImpl( new Impl( id, x, y ) )
 {
 }
 

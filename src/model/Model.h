@@ -27,10 +27,11 @@ public:
 	//! @param pObserver pointer to the observer to add.
 	void addObserver( IObserver* pObserver );
 
-	//! Creates a unique Id
+	//! Notify all observers
 	//!
-	//! @returns the unique id.
-	ActorId createId();
+	//! @param what   string with information about what to notify about.
+	//! @param pActor pointer to the actor responsible for the notification.
+	void notifyObservers( ::std::string what, IActor* pActor );
 
 private:
 

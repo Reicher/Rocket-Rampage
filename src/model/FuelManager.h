@@ -2,6 +2,8 @@
 
 #include "IManager.h"
 #include <memory>
+#include "IObservable.h"
+#include "IUniqueId.h"
 
 namespace model {
 
@@ -9,11 +11,11 @@ class FuelManager : public IManager
 {
 public:
 
-	FuelManager( );
+	FuelManager( IObservable* pObservable, IUniqueId* pUniqueId );
 
 	~FuelManager();
 
-	void update(double dt);
+	void update( double dt );
 
 private:
 
