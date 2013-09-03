@@ -1,9 +1,11 @@
 #pragma once
 
-#include "IManager.h"
 #include <memory>
-#include "IObservable.h"
-#include "IUniqueId.h"
+#include <math.h>
+
+#include "../IManager.h"
+#include "../IObservable.h"
+#include "../IUniqueId.h"
 
 namespace model {
 

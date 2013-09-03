@@ -1,7 +1,7 @@
 #include "Model.h"
 #include "IObserver.h"
 #include "IManager.h"
-#include "FuelManager.h"
+#include "Managers/FuelManager.h"
 #include "UniqueId.h"
 #include <list>
 #include <vector>
