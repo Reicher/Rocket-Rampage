@@ -38,6 +38,11 @@ public:
 		return 0.0;
 	}
 
+	double getSize()
+	{
+		return 0.0;
+	}
+
 private:
 
 	ActorId m_id;
@@ -79,6 +84,11 @@ double FuelActor::getY()
 double FuelActor::getRotation()
 {
 	return m_apImpl->getRotation();
+}
+
+double FuelActor::getSize()
+{
+	return m_apImpl->getSize();
 }
 
 }

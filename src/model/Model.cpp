@@ -2,6 +2,7 @@
 #include "IObserver.h"
 #include "IManager.h"
 #include "Managers/FuelManager.h"
+#include "Managers/CosmosManager.h"
 #include "UniqueId.h"
 #include <list>
 #include <vector>
@@ -72,6 +73,7 @@ private:
 	void createManagers()
 	{
 		m_managers.push_back( new FuelManager( m_pObservable, m_apUniqueId.get() ) );
+		m_managers.push_back( new CosmosManager( m_pObservable, m_apUniqueId.get() ) );
 	}
 };
 

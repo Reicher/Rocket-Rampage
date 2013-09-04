@@ -1,5 +1,6 @@
 #include "View.h"
 #include "drawables/FuelDrawable.h"
+#include "drawables/PlanetDrawable.h"
 #include "../model/IActor.h"
 #include <SFML/Graphics.hpp>
 #include <map>
@@ -43,6 +44,10 @@ public:
 		if( what == "addFuel" )
 		{
 			m_drawables.insert( DrawableMap::value_type( pActor->getId(), new FuelDrawable( pActor, m_pContent ) ) );
+		}
+		else if( what == "addPlanet" )
+		{
+			m_drawables.insert( DrawableMap::value_type( pActor->getId(), new PlanetDrawable( pActor, m_pContent ) ) );
 		}
 	}
 

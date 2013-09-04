@@ -14,8 +14,8 @@ void Content::loadTextures()
 	m_rocketTex.setSmooth(true);
 
 	m_fuelTex.loadFromFile("../Textures/Fuel.png");
-	m_homePlanet.loadFromFile("../Textures/HomePlanet.png");
-	m_homePlanet.setSmooth(true);
+	m_planetTex.loadFromFile("../Textures/HomePlanet.png");
+	m_planetTex.setSmooth(true);
 }
 
 void Content::loadSounds()

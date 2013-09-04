@@ -5,13 +5,13 @@
 
 namespace model {
 
-class FuelActor : public IActor
+class PlanetActor : public IActor
 {
 public:
 
-	FuelActor( ActorId id, double x, double y );
+	PlanetActor( ActorId id, double x, double y, double size, double atmosphereThickness = 0.0 );
 
-	~FuelActor();
+	~PlanetActor();
 
 	void update(double dt);
 
@@ -24,6 +24,8 @@ public:
 	double getRotation();
 
 	double getSize();
+
+	double getAtmosphereThickness();
 
 private:
 

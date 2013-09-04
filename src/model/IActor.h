@@ -20,6 +20,8 @@ public:
 	virtual double getY() = 0;
 
 	virtual double getRotation() = 0;
+
+	virtual double getSize() = 0;
 };
 
 }

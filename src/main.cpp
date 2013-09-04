@@ -80,7 +80,7 @@ int main()
     //Create player/Rocket/HomePlanet
 	Rocket rocket(&content, &window);
 	float size = 400;
-	Planet homePlanet(content.m_homePlanet, sf::Vector2f(0.0, 0.0), size);
+	Planet homePlanet(content.m_planetTex, sf::Vector2f(0.0, 0.0), size);
 
 	init(rocket);
 
