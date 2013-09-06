@@ -9,7 +9,7 @@ public:
 
 	virtual ~IObserver(){}
 
-	virtual void notify( std::string what, IActor* pActor ) = 0;
+	virtual void notify( std::string what, void* p ) = 0;
 };
 
 }

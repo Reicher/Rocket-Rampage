@@ -30,8 +30,8 @@ public:
 	//! Notify all observers
 	//!
 	//! @param what   string with information about what to notify about.
-	//! @param pActor pointer to the actor responsible for the notification.
-	void notifyObservers( ::std::string what, IActor* pActor );
+	//! @param p	  pointer to the actor responsible for the notification.
+	void notifyObservers( ::std::string what, void* p );
 
 private:
 

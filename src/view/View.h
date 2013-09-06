@@ -23,7 +23,7 @@ public:
 	//! Is the view open
 	bool isOpen();
 
-	void notify( std::string what, ::model::IActor* pActor );
+	void notify( std::string what, void* p );
 
 private:
 

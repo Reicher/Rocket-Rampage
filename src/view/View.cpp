@@ -1,7 +1,9 @@
 #include "View.h"
 #include "drawables/FuelDrawable.h"
 #include "drawables/PlanetDrawable.h"
+#include "drawables/ScoreDrawable.h"
 #include "../model/IActor.h"
+#include "../model/actors/ScoreActor.h"
 #include <SFML/Graphics.hpp>
 #include <map>
 
@@ -39,15 +41,22 @@ public:
 		return m_apRenderWindow->isOpen();
 	}
 
-	void notify( std::string what, ::model::IActor* pActor )
+	void notify( std::string what, void* p )
 	{
 		if( what == "addFuel" )
 		{
+			model::IActor* pActor = static_cast<model::IActor*>( p );
 			m_drawables.insert( DrawableMap::value_type( pActor->getId(), new FuelDrawable( pActor, m_pContent ) ) );
 		}
 		else if( what == "addPlanet" )
 		{
+			model::IActor* pActor = static_cast<model::IActor*>( p );
 			m_drawables.insert( DrawableMap::value_type( pActor->getId(), new PlanetDrawable( pActor, m_pContent ) ) );
+		}
+		else if( what == "addScore" )
+		{
+			model::ScoreActor* pActor = static_cast<model::ScoreActor*>( p );
+			m_drawables.insert( DrawableMap::value_type( pActor->getId(), new ScoreDrawable( pActor, m_pContent ) ) );
 		}
 	}
 
@@ -99,9 +108,9 @@ bool View::isOpen()
 	return m_apImpl->isOpen();
 }
 
-void View::notify( std::string what, ::model::IActor* pActor )
+void View::notify( std::string what, void* p )
 {
-	m_apImpl->notify( what, pActor );
+	m_apImpl->notify( what, p );
 }
 
 }

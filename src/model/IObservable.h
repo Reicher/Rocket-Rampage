@@ -15,7 +15,7 @@ public:
 
 	virtual void addObserver( IObserver* pObserver ) = 0;
 
-	virtual void notifyObservers( ::std::string what, IActor* pActor ) = 0;
+	virtual void notifyObservers( ::std::string what, void* p ) = 0;
 };
 
 }

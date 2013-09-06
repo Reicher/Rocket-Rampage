@@ -1,4 +1,5 @@
 #include "ScoreManager.h"
+#include "../actors/ScoreActor.h"
 
 namespace model {
 
@@ -9,7 +10,9 @@ public:
 	Impl( IObservable* pObservable, IUniqueId* pUniqueId )
 	: m_pObservable( pObservable )
 	, m_pUniqueId( pUniqueId )
+	, m_pScoreActor( new ScoreActor( m_pUniqueId->getId(), Vector2( 10.0, 10.0 ) ) )
 	{
+		addScore();
 	}
 
 	void update( double dt )
@@ -22,9 +25,11 @@ private:
 
 	IUniqueId* m_pUniqueId;
 
-	void addScoreMeter()
+	ScoreActor* m_pScoreActor;
+
+	void addScore()
 	{
-		// TODO: Add a ScoreActor and notify the view.
+		m_pObservable->notifyObservers( "addScore", m_pScoreActor );
 	}
 
 };

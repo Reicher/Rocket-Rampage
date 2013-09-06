@@ -1,8 +1,9 @@
 #include "Model.h"
 #include "IObserver.h"
 #include "IManager.h"
-#include "Managers/FuelManager.h"
-#include "Managers/CosmosManager.h"
+#include "managers/FuelManager.h"
+#include "managers/CosmosManager.h"
+#include "managers/ScoreManager.h"
 #include "UniqueId.h"
 #include <list>
 #include <vector>
@@ -46,13 +47,13 @@ public:
 		m_observers.push_back( pObserver );
 	}
 
-	void notifyObservers( ::std::string what, IActor* pActor )
+	void notifyObservers( ::std::string what, void* p )
 	{
 		for( Observers::iterator it( m_observers.begin() );
 			 it != m_observers.end();
 			 ++it )
 		{
-			( *it )->notify( what, pActor );
+			( *it )->notify( what, p );
 		}
 	}
 
@@ -74,6 +75,7 @@ private:
 	{
 		m_managers.push_back( new FuelManager( m_pObservable, m_apUniqueId.get() ) );
 		m_managers.push_back( new CosmosManager( m_pObservable, m_apUniqueId.get() ) );
+		m_managers.push_back( new ScoreManager( m_pObservable, m_apUniqueId.get() ) );
 	}
 };
 
@@ -102,9 +104,9 @@ void Model::addObserver( IObserver* pObserver )
 	m_apImpl->addObserver( pObserver );
 }
 
-void Model::notifyObservers( ::std::string what, IActor* pActor )
+void Model::notifyObservers( ::std::string what, void* p )
 {
-	m_apImpl->notifyObservers( what, pActor );
+	m_apImpl->notifyObservers( what, p );
 }
 
 }
