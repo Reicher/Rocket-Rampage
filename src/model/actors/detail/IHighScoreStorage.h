@@ -3,6 +3,8 @@
 #include <string>
 #include <list>
 
+namespace model {
+
 //! @brief A high score storage entry.
 class HighScoreEntry
 {
@@ -62,3 +64,5 @@ public:
 	virtual void updateHighScoreList(const HighScoreList& newHighScoreList) = 0;
 
 };
+
+}

@@ -2,6 +2,8 @@
 #include <sstream>
 #include "HighScoreFileStorage.h"
 
+namespace model {
+
 HighScoreFileStorage::HighScoreFileStorage()
 : m_fileName("HIGHSCORE.TXT")
 , m_highScoreCache()
@@ -81,6 +83,7 @@ bool HighScoreFileStorage::parseHighScoreEntry(const std::string& line, HighScor
 	return false;
 }
 
+}
 
 
 

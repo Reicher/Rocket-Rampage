@@ -2,6 +2,8 @@
 
 #include "IHighScoreStorage.h"
 
+namespace model {
+
 class HighScoreFileStorage : public IHighScoreStorage
 {
 public:
@@ -25,3 +27,5 @@ private:
 	HighScoreList m_highScoreCache;
 
 };
+
+}
