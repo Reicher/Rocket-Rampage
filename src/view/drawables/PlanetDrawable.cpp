@@ -1,13 +1,14 @@
 #include "PlanetDrawable.h"
 #include "../../model/IActor.h"
 #include "../../model/actors/PlanetActor.h"
+#include "../../Content.h"
 
 namespace view {
 
 class PlanetDrawable::Impl
 {
 public:
-	Impl( ::model::IActor* pActor,
+	Impl( ::model::PlanetActor* pActor,
 		  Content*         pContent )
 	: m_pContent( pContent )
 	, m_pActor( pActor )
@@ -26,8 +27,7 @@ public:
 		m_apSprite->setOrigin(0, 0);
 		m_apSprite->setPosition(-m_pActor->getSize(), -m_pActor->getSize());
 
-		//float thickness = static_cast<model::PlanetActor*>(m_pActor->getAtmosphereThickness());
-		float thickness = 150; // For now
+		float thickness = m_pActor->getAtmosphereThickness();
 
 		m_atmosphere.setRadius(size + thickness);
 		m_atmosphere.setOrigin(size + thickness, size + thickness);
@@ -45,14 +45,14 @@ private:
 
 	Content* m_pContent;
 
-	::model::IActor* m_pActor;
+	::model::PlanetActor* m_pActor;
 
 	::std::auto_ptr< ::sf::Sprite > m_apSprite;
 
 	sf::CircleShape m_atmosphere;
 };
 
-PlanetDrawable::PlanetDrawable( ::model::IActor* pActor, Content* pContent )
+PlanetDrawable::PlanetDrawable( ::model::PlanetActor* pActor, Content* pContent )
 : m_apImpl( new Impl( pActor, pContent ) )
 {
 }

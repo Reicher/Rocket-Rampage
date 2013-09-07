@@ -50,7 +50,7 @@ public:
 		}
 		else if( what == "addPlanet" )
 		{
-			model::IActor* pActor = static_cast<model::IActor*>( p );
+			model::PlanetActor* pActor = static_cast<model::PlanetActor*>( p );
 			m_drawables.insert( DrawableMap::value_type( pActor->getId(), new PlanetDrawable( pActor, m_pContent ) ) );
 		}
 		else if( what == "addScore" )

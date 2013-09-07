@@ -3,14 +3,17 @@
 #include <SFML/Graphics.hpp>
 #include <memory>
 #include "../../model/IActorFwd.h"
-#include "../../Content.h"
+#include "../../model/actors/PlanetActor.h"
+
+class Content;
+
 
 namespace view {
 
 class PlanetDrawable : public ::sf::Drawable
 {
 public:
-	PlanetDrawable( ::model::IActor* pActor,
+	PlanetDrawable( ::model::PlanetActor* pActor,
 		          Content*         pContent );
 
 	~PlanetDrawable();
