@@ -25,6 +25,8 @@ public:
 
 	void notify( const model::Event& e );
 
+	bool readEvent( ::sf::Event& event );
+
 private:
 
 	class Impl;

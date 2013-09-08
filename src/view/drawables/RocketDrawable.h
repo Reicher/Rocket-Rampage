@@ -3,20 +3,19 @@
 #include <SFML/Graphics.hpp>
 #include <memory>
 #include "../../model/IActorFwd.h"
-#include "../../model/actors/PlanetActor.h"
-
-class Content;
-
+#include "../../Content.h"
+#include "../../model/actors/RocketActor.h"
 
 namespace view {
 
-class PlanetDrawable : public ::sf::Drawable
+class RocketDrawable : public ::sf::Drawable
 {
 public:
-	PlanetDrawable( ::model::PlanetActor* pActor,
-		          Content*         pContent );
+	RocketDrawable( ::model::RocketActor* pActor,
+		          Content*         pContent,
+		          ::sf::View* 		pView);
 
-	~PlanetDrawable();
+	~RocketDrawable();
 
 	void draw(::sf::RenderTarget& target, ::sf::RenderStates states) const;
 

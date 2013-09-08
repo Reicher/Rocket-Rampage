@@ -21,8 +21,6 @@ public:
 		srand (time(NULL));
 
 		init();
-		addFuel( Vector2( 50, 50 ));
-		addFuel( Vector2( 200, 100 ));
 	}
 
 	void update( double dt )

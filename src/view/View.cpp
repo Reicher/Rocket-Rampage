@@ -2,9 +2,11 @@
 #include "drawables/FuelDrawable.h"
 #include "drawables/PlanetDrawable.h"
 #include "drawables/ScoreDrawable.h"
+#include "../model/IActor.h"
 #include "../model/actors/FuelActor.h"
 #include "../model/actors/PlanetActor.h"
 #include "../model/actors/ScoreActor.h"
+#include "drawables/RocketDrawable.h"
 #include <SFML/Graphics.hpp>
 #include <map>
 
@@ -16,7 +18,7 @@ public:
 	Impl( Content* pContent )
 	: m_pContent( pContent )
 	, m_apRenderWindow( new sf::RenderWindow( sf::VideoMode( 800, 600 ), "Rocket Rampage" ) )
-	, m_apView( new sf::View )
+	, m_view( )
 	, m_drawables()
 	{
 	}
@@ -32,7 +34,7 @@ public:
 
 		draw();
 
-		m_apRenderWindow->setView( *m_apView );
+		m_apRenderWindow->setView( m_view );
 
 		m_apRenderWindow->display();
 	}
@@ -56,6 +58,8 @@ public:
 		case model::EV_ADD_SCORE:
 			handleAddScore( e.getValue() );
 			break;
+		case model::EV_ADD_ROCKET:
+			handleAddRocket( e.getValue() );
 		default:
 			break;
 		}
@@ -77,7 +81,7 @@ public:
 	{
 		try
 		{
-			model::IActor* pActor = boost::any_cast<model::IActor*>( value );
+			model::PlanetActor* pActor = boost::any_cast<model::PlanetActor*>( value );
 			m_drawables.insert( DrawableMap::value_type( pActor->getId(), new PlanetDrawable( pActor, m_pContent ) ) );
 		}
 		catch ( const boost::bad_any_cast& )
@@ -97,13 +101,30 @@ public:
 		}
 	}
 
+	void handleAddRocket( const boost::any& value )
+	{
+		try
+		{
+			model::RocketActor* pActor = boost::any_cast<model::RocketActor*>( value );
+			m_drawables.insert( DrawableMap::value_type( pActor->getId(), new RocketDrawable( pActor, m_pContent, &m_view ) ) );
+		}
+		catch ( const boost::bad_any_cast& )
+		{
+		}
+	}
+
+	bool readEvent( ::sf::Event& event )
+	{
+		return m_apRenderWindow->pollEvent( event );
+	}
+
 private:
 
 	Content* m_pContent;
 
 	::std::auto_ptr< ::sf::RenderWindow > m_apRenderWindow;
 
-	::std::auto_ptr< ::sf::View > m_apView;
+	::sf::View m_view;
 
 	typedef ::std::map< ::model::ActorId, ::sf::Drawable* > DrawableMap;
 
@@ -148,6 +169,11 @@ bool View::isOpen()
 void View::notify( const model::Event& e )
 {
 	m_apImpl->notify( e );
+}
+
+bool View::readEvent( ::sf::Event& event )
+{
+	return m_apImpl->readEvent( event );
 }
 
 }

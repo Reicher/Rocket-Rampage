@@ -9,7 +9,8 @@ enum EventType
 {
 	EV_ADD_FUEL,
 	EV_ADD_PLANET,
-	EV_ADD_SCORE
+	EV_ADD_SCORE,
+	EV_ADD_ROCKET
 };
 
 class Event

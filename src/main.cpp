@@ -12,8 +12,7 @@
 #include <sstream>
 #include <math.h>
 
-#include "model/Model.h"
-#include "view/View.h"
+#include "controller/Controller.h"
 
 std::string Convert (float number){
   std::ostringstream buff;
@@ -34,27 +33,15 @@ int main()
 {
 	if( false ) // Set to true to use the new structure
 	{
-		::model::Model model;
-
-		Content content;
-
-		::view::View view( &content );
-
-		view.init();
-
-		model.addObserver( &view );
-
-		model.init();
+		::controller::Controller controller;
 
 		sf::Clock clock;
 
 		float dt( 0 );
 
-		while( true ) // Replace with something that checks if the window is closed.
+		while( controller.isGameOn() )
 		{
-			model.update( dt );
-
-			view.update();
+			controller.update( dt );
 
 			dt = clock.restart().asSeconds();
 		}
@@ -66,7 +53,7 @@ int main()
 	Content content;
 
 	// Music
-	//content.m_mainTheme.play();
+	content.m_mainTheme.play();
 	content.m_mainTheme.setLoop(true);
 	content.m_mainTheme.setVolume(75);
 

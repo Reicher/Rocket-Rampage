@@ -22,6 +22,8 @@ public:
 	//! @param dt seconds elapsed since the last update call.
 	void update( float dt );
 
+	void setRocketThrust( bool isOn, int id );
+
 	//! Adds an observer to the model.
 	//!
 	//! @param pObserver pointer to the observer to add.
