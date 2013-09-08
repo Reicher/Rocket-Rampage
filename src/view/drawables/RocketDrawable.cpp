@@ -29,8 +29,10 @@ public:
 
 	void draw( ::sf::RenderTarget& target, ::sf::RenderStates states ) const
 	{
-		target.draw( *m_apSprite, states );
+		m_apSprite->setPosition(m_pActor->getX(), m_pActor->getY());
 		m_pView->setCenter(m_pActor->getX(), m_pActor->getY());
+
+		target.draw( *m_apSprite, states );
 	}
 
 private:

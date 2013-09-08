@@ -31,7 +31,7 @@ void init(Rocket &rocket)
 
 int main()
 {
-	if( false ) // Set to true to use the new structure
+	if( true ) // Set to true to use the new structure
 	{
 		::controller::Controller controller;
 
