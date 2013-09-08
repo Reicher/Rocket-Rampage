@@ -19,6 +19,8 @@ public:
 
 	void update( double dt );
 
+	void setRocketThrust( bool isOn, int id );
+
 private:
 
 	class Impl;

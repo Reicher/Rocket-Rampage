@@ -26,6 +26,8 @@ public:
 
 	double getSize();
 
+	void setThrustOn( bool thrust );
+
 private:
 
 	class Impl;

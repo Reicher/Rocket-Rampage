@@ -18,13 +18,18 @@ public:
 
 	void update( double dt )
 	{
-		for( Actors::iterator it( m_actors.begin() );
+		for( RocketActors::iterator it( m_actors.begin() );
 			 it != m_actors.end();
 			 ++it )
 		{
-			( *it )->update( dt );
+			(*it)->update( dt );
 		}
 	}
+
+	 void setRocketThrust( bool isOn, int id )
+	 {
+		 m_actors[id]->setThrustOn( isOn );
+	 }
 
 private:
 
@@ -32,11 +37,13 @@ private:
 
 	IUniqueId* m_pUniqueId;
 
-	Actors m_actors;
+	typedef ::std::vector<RocketActor*> RocketActors;
+
+	RocketActors m_actors;
 
 	void addRocket( Vector2 pos )
 	{
-		IActor* pActor( new RocketActor( m_pUniqueId->getId(), pos) );
+		RocketActor* pActor( new RocketActor( m_pUniqueId->getId(), pos) );
 
 		m_pObservable->notifyObservers( "addRocket", pActor );
 
@@ -56,6 +63,11 @@ PlayerManager::~PlayerManager()
 void PlayerManager::update( double dt )
 {
 	m_apImpl->update( dt );
+}
+
+void PlayerManager::setRocketThrust( bool isOn, int id )
+{
+	m_apImpl->setRocketThrust( isOn, id );
 }
 
 }

@@ -10,12 +10,16 @@ public:
 	, m_position(position)
 	, m_rotation(0.0)
 	, m_size(1.0)
+	, m_thrust( false )
 	{
 	}
 
 	void update( double dt )
 	{
-		m_position.y -= dt;
+		if( m_thrust )
+		{
+			m_position.y -= dt * 1000;
+		}
 	}
 
 	ActorId getId()
@@ -43,6 +47,11 @@ public:
 		return m_size;
 	}
 
+	void setThrustOn( bool thrust )
+	{
+		m_thrust = thrust;
+	}
+
 private:
 
 	ActorId m_id;
@@ -51,6 +60,8 @@ private:
 
 	double m_rotation;
 	double m_size;
+
+	bool m_thrust;
 };
 
 RocketActor::RocketActor( ActorId id, Vector2 position )
@@ -90,6 +101,11 @@ double RocketActor::getRotation()
 double RocketActor::getSize()
 {
 	return m_apImpl->getSize();
+}
+
+void RocketActor::setThrustOn( bool thrust )
+{
+	m_apImpl->setThrustOn( thrust );
 }
 
 }

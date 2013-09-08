@@ -67,6 +67,11 @@ public:
 		}
 	}
 
+	bool readEvent( ::sf::Event& event )
+	{
+		return m_apRenderWindow->pollEvent( event );
+	}
+
 private:
 
 	Content* m_pContent;
@@ -118,6 +123,11 @@ bool View::isOpen()
 void View::notify( std::string what, void* p )
 {
 	m_apImpl->notify( what, p );
+}
+
+bool View::readEvent( ::sf::Event& event )
+{
+	return m_apImpl->readEvent( event );
 }
 
 }

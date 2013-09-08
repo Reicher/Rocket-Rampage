@@ -19,6 +19,7 @@ public:
 	, m_observers()
 	, m_managers()
 	, m_apUniqueId( new UniqueId( 100 ) )
+	, m_pPlayerManager( 0 )
 	{
 	}
 
@@ -42,6 +43,12 @@ public:
 		}
 
 	}
+
+	void setRocketThrust( bool isOn, int id )
+	{
+		m_pPlayerManager->setRocketThrust( isOn, id );
+	}
+
 
 	void addObserver( IObserver* pObserver )
 	{
@@ -72,12 +79,17 @@ private:
 
 	::std::auto_ptr<IUniqueId> m_apUniqueId;
 
+	PlayerManager* m_pPlayerManager;
+
 	void createManagers()
 	{
 		m_managers.push_back( new FuelManager( m_pObservable, m_apUniqueId.get() ) );
 		m_managers.push_back( new CosmosManager( m_pObservable, m_apUniqueId.get() ) );
 		m_managers.push_back( new ScoreManager( m_pObservable, m_apUniqueId.get() ) );
-		m_managers.push_back( new PlayerManager( m_pObservable, m_apUniqueId.get() ) );
+
+		m_pPlayerManager = new PlayerManager( m_pObservable, m_apUniqueId.get() );
+
+		m_managers.push_back( m_pPlayerManager );
 	}
 };
 
@@ -99,6 +111,11 @@ void Model::init()
 void Model::update( float dt )
 {
 	return m_apImpl->update( dt );
+}
+
+void Model::setRocketThrust( bool isOn, int id )
+{
+	m_apImpl->setRocketThrust( isOn, id );
 }
 
 void Model::addObserver( IObserver* pObserver )

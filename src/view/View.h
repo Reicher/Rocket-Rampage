@@ -25,6 +25,8 @@ public:
 
 	void notify( std::string what, void* p );
 
+	bool readEvent( ::sf::Event& event );
+
 private:
 
 	class Impl;
