@@ -29,9 +29,8 @@ public:
 
 	//! Notify all observers
 	//!
-	//! @param what   string with information about what to notify about.
-	//! @param p	  pointer to the actor responsible for the notification.
-	void notifyObservers( ::std::string what, void* p );
+	//! @param e The event.
+	void notifyObservers( const Event& e );
 
 private:
 

@@ -29,7 +29,7 @@ private:
 
 	void addScore()
 	{
-		m_pObservable->notifyObservers( "addScore", m_pScoreActor );
+		m_pObservable->notifyObservers( Event( EV_ADD_SCORE, m_pScoreActor ) );
 	}
 
 };

@@ -2,7 +2,8 @@
 #include "drawables/FuelDrawable.h"
 #include "drawables/PlanetDrawable.h"
 #include "drawables/ScoreDrawable.h"
-#include "../model/IActor.h"
+#include "../model/actors/FuelActor.h"
+#include "../model/actors/PlanetActor.h"
 #include "../model/actors/ScoreActor.h"
 #include <SFML/Graphics.hpp>
 #include <map>
@@ -41,22 +42,58 @@ public:
 		return m_apRenderWindow->isOpen();
 	}
 
-	void notify( std::string what, void* p )
+	void notify( const model::Event& e )
 	{
-		if( what == "addFuel" )
+		model::EventType type = e.getType();
+		switch ( type )
 		{
-			model::IActor* pActor = static_cast<model::IActor*>( p );
+		case model::EV_ADD_FUEL:
+			handleAddFuel( e.getValue() );
+			break;
+		case model::EV_ADD_PLANET:
+			handleAddPlanet( e.getValue() );
+			break;
+		case model::EV_ADD_SCORE:
+			handleAddScore( e.getValue() );
+			break;
+		default:
+			break;
+		}
+	}
+
+	void handleAddFuel( const boost::any& value )
+	{
+		try
+		{
+			model::IActor* pActor = boost::any_cast<model::IActor*>( value );
 			m_drawables.insert( DrawableMap::value_type( pActor->getId(), new FuelDrawable( pActor, m_pContent ) ) );
 		}
-		else if( what == "addPlanet" )
+		catch ( const boost::bad_any_cast& )
 		{
-			model::IActor* pActor = static_cast<model::IActor*>( p );
+		}
+	}
+
+	void handleAddPlanet( const boost::any& value )
+	{
+		try
+		{
+			model::IActor* pActor = boost::any_cast<model::IActor*>( value );
 			m_drawables.insert( DrawableMap::value_type( pActor->getId(), new PlanetDrawable( pActor, m_pContent ) ) );
 		}
-		else if( what == "addScore" )
+		catch ( const boost::bad_any_cast& )
 		{
-			model::ScoreActor* pActor = static_cast<model::ScoreActor*>( p );
+		}
+	}
+
+	void handleAddScore( const boost::any& value )
+	{
+		try
+		{
+			model::ScoreActor* pActor = boost::any_cast<model::ScoreActor*>( value );
 			m_drawables.insert( DrawableMap::value_type( pActor->getId(), new ScoreDrawable( pActor, m_pContent ) ) );
+		}
+		catch ( const boost::bad_any_cast& )
+		{
 		}
 	}
 
@@ -108,9 +145,9 @@ bool View::isOpen()
 	return m_apImpl->isOpen();
 }
 
-void View::notify( std::string what, void* p )
+void View::notify( const model::Event& e )
 {
-	m_apImpl->notify( what, p );
+	m_apImpl->notify( e );
 }
 
 }

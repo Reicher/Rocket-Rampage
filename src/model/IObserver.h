@@ -1,5 +1,4 @@
-#include "IActorFwd.h"
-#include <string>
+#include "Event.h"
 
 namespace model {
 
@@ -9,7 +8,7 @@ public:
 
 	virtual ~IObserver(){}
 
-	virtual void notify( std::string what, void* p ) = 0;
+	virtual void notify( const Event& e  ) = 0;
 };
 
 }

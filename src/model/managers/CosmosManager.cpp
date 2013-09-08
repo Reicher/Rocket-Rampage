@@ -42,7 +42,7 @@ private:
 	{
 		IActor* pActor( new PlanetActor( m_pUniqueId->getId(), pos.x, pos.y, size, atmosphereThickness ) );
 
-		m_pObservable->notifyObservers( "addPlanet", pActor );
+		m_pObservable->notifyObservers( Event( EV_ADD_PLANET, pActor ) );
 
 		m_actors.push_back( pActor );
 	}

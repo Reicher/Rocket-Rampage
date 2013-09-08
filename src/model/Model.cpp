@@ -47,13 +47,13 @@ public:
 		m_observers.push_back( pObserver );
 	}
 
-	void notifyObservers( ::std::string what, void* p )
+	void notifyObservers( const Event& e )
 	{
 		for( Observers::iterator it( m_observers.begin() );
 			 it != m_observers.end();
 			 ++it )
 		{
-			( *it )->notify( what, p );
+			( *it )->notify( e );
 		}
 	}
 
@@ -104,9 +104,9 @@ void Model::addObserver( IObserver* pObserver )
 	m_apImpl->addObserver( pObserver );
 }
 
-void Model::notifyObservers( ::std::string what, void* p )
+void Model::notifyObservers( const Event& e )
 {
-	m_apImpl->notifyObservers( what, p );
+	m_apImpl->notifyObservers( e );
 }
 
 }

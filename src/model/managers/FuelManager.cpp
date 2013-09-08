@@ -95,7 +95,7 @@ private:
 	{
 		IActor* pActor( new FuelActor( m_pUniqueId->getId(), pos.x, pos.y ) );
 
-		m_pObservable->notifyObservers( "addFuel", pActor );
+		m_pObservable->notifyObservers( Event( EV_ADD_FUEL, pActor ) );
 
 		m_actors.push_back( pActor );
 	}

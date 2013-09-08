@@ -1,7 +1,6 @@
 #pragma once
 
-#include <string>
-#include "IActorFwd.h"
+#include "Event.h"
 
 namespace model {
 
@@ -15,7 +14,7 @@ public:
 
 	virtual void addObserver( IObserver* pObserver ) = 0;
 
-	virtual void notifyObservers( ::std::string what, void* p ) = 0;
+	virtual void notifyObservers( const Event& e ) = 0;
 };
 
 }
