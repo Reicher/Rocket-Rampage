@@ -4,6 +4,7 @@
 #include "managers/FuelManager.h"
 #include "managers/CosmosManager.h"
 #include "managers/ScoreManager.h"
+#include "managers/PlayerManager.h"
 #include "UniqueId.h"
 #include <list>
 #include <vector>
@@ -76,6 +77,7 @@ private:
 		m_managers.push_back( new FuelManager( m_pObservable, m_apUniqueId.get() ) );
 		m_managers.push_back( new CosmosManager( m_pObservable, m_apUniqueId.get() ) );
 		m_managers.push_back( new ScoreManager( m_pObservable, m_apUniqueId.get() ) );
+		m_managers.push_back( new PlayerManager( m_pObservable, m_apUniqueId.get() ) );
 	}
 };
 

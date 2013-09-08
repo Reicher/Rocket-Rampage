@@ -2,6 +2,8 @@
 #include "drawables/FuelDrawable.h"
 #include "drawables/PlanetDrawable.h"
 #include "drawables/ScoreDrawable.h"
+#include "drawables/RocketDrawable.h"
+
 #include "../model/IActor.h"
 #include "../model/actors/ScoreActor.h"
 #include <SFML/Graphics.hpp>
@@ -15,7 +17,7 @@ public:
 	Impl( Content* pContent )
 	: m_pContent( pContent )
 	, m_apRenderWindow( new sf::RenderWindow( sf::VideoMode( 800, 600 ), "Rocket Rampage" ) )
-	, m_apView( new sf::View )
+	, m_view( )
 	, m_drawables()
 	{
 	}
@@ -31,7 +33,7 @@ public:
 
 		draw();
 
-		m_apRenderWindow->setView( *m_apView );
+		m_apRenderWindow->setView( m_view );
 
 		m_apRenderWindow->display();
 	}
@@ -58,6 +60,11 @@ public:
 			model::ScoreActor* pActor = static_cast<model::ScoreActor*>( p );
 			m_drawables.insert( DrawableMap::value_type( pActor->getId(), new ScoreDrawable( pActor, m_pContent ) ) );
 		}
+		else if( what == "addRocket" )
+		{
+			model::RocketActor* pActor = static_cast<model::RocketActor*>( p );
+			m_drawables.insert( DrawableMap::value_type( pActor->getId(), new RocketDrawable( pActor, m_pContent, &m_view ) ) );
+		}
 	}
 
 private:
@@ -66,7 +73,7 @@ private:
 
 	::std::auto_ptr< ::sf::RenderWindow > m_apRenderWindow;
 
-	::std::auto_ptr< ::sf::View > m_apView;
+	::sf::View m_view;
 
 	typedef ::std::map< ::model::ActorId, ::sf::Drawable* > DrawableMap;
 
