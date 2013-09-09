@@ -18,8 +18,10 @@ public:
 	Impl( Content* pContent )
 	: m_pContent( pContent )
 	, m_apRenderWindow( new sf::RenderWindow( sf::VideoMode( 800, 600 ), "Rocket Rampage" ) )
-	, m_view( )
-	, m_drawables()
+	, m_gameView()
+	, m_guiView()
+	, m_gameDrawables()
+	, m_guiDrawables()
 	{
 	}
 
@@ -32,9 +34,9 @@ public:
 	{
 		m_apRenderWindow->clear( sf::Color::Black );
 
-		draw();
+		drawGame();
 
-		m_apRenderWindow->setView( m_view );
+		drawGui();
 
 		m_apRenderWindow->display();
 	}
@@ -70,7 +72,7 @@ public:
 		try
 		{
 			model::IActor* pActor = boost::any_cast<model::IActor*>( value );
-			m_drawables.insert( DrawableMap::value_type( pActor->getId(), new FuelDrawable( pActor, m_pContent ) ) );
+			m_gameDrawables.insert( DrawableMap::value_type( pActor->getId(), new FuelDrawable( pActor, m_pContent ) ) );
 		}
 		catch ( const boost::bad_any_cast& )
 		{
@@ -82,7 +84,7 @@ public:
 		try
 		{
 			model::PlanetActor* pActor = boost::any_cast<model::PlanetActor*>( value );
-			m_drawables.insert( DrawableMap::value_type( pActor->getId(), new PlanetDrawable( pActor, m_pContent ) ) );
+			m_gameDrawables.insert( DrawableMap::value_type( pActor->getId(), new PlanetDrawable( pActor, m_pContent ) ) );
 		}
 		catch ( const boost::bad_any_cast& )
 		{
@@ -94,7 +96,7 @@ public:
 		try
 		{
 			model::ScoreActor* pActor = boost::any_cast<model::ScoreActor*>( value );
-			m_drawables.insert( DrawableMap::value_type( pActor->getId(), new ScoreDrawable( pActor, m_pContent ) ) );
+			m_guiDrawables.insert( DrawableMap::value_type( pActor->getId(), new ScoreDrawable( pActor, m_pContent ) ) );
 		}
 		catch ( const boost::bad_any_cast& )
 		{
@@ -106,7 +108,7 @@ public:
 		try
 		{
 			model::RocketActor* pActor = boost::any_cast<model::RocketActor*>( value );
-			m_drawables.insert( DrawableMap::value_type( pActor->getId(), new RocketDrawable( pActor, m_pContent, &m_view ) ) );
+			m_gameDrawables.insert( DrawableMap::value_type( pActor->getId(), new RocketDrawable( pActor, m_pContent, &m_gameView ) ) );
 		}
 		catch ( const boost::bad_any_cast& )
 		{
@@ -124,16 +126,34 @@ private:
 
 	::std::auto_ptr< ::sf::RenderWindow > m_apRenderWindow;
 
-	::sf::View m_view;
+	::sf::View m_gameView;
+
+	::sf::View m_guiView;
 
 	typedef ::std::map< ::model::ActorId, ::sf::Drawable* > DrawableMap;
 
-	DrawableMap m_drawables;
+	DrawableMap m_gameDrawables;
 
-	void draw()
+	DrawableMap m_guiDrawables;
+
+	void drawGame()
 	{
-		for( DrawableMap::iterator it( m_drawables.begin() );
-			 it != m_drawables.end();
+		m_apRenderWindow->setView( m_gameView );
+
+		for( DrawableMap::iterator it( m_gameDrawables.begin() );
+			 it != m_gameDrawables.end();
+			 ++it )
+		{
+			m_apRenderWindow->draw( *(it->second) );
+		}
+	}
+
+	void drawGui()
+	{
+		m_apRenderWindow->setView( m_guiView );
+
+		for( DrawableMap::iterator it( m_guiDrawables.begin() );
+			 it != m_guiDrawables.end();
 			 ++it )
 		{
 			m_apRenderWindow->draw( *(it->second) );

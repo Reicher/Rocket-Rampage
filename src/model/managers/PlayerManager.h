@@ -9,11 +9,13 @@
 
 namespace model {
 
+class CosmosManager;
+
 class PlayerManager : public IManager
 {
 public:
 
-	PlayerManager( IObservable* pObservable, IUniqueId* pUniqueId );
+	PlayerManager( IObservable* pObservable, IUniqueId* pUniqueId, CosmosManager* pCosmosManager );
 
 	~PlayerManager();
 

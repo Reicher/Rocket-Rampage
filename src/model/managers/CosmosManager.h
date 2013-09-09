@@ -9,6 +9,8 @@
 
 namespace model {
 
+class IActor;
+
 //! Manager for planets, asteroids, stars'n  shit
 class CosmosManager : public IManager
 {
@@ -19,6 +21,8 @@ public:
 	~CosmosManager();
 
 	void update( double dt );
+
+	IActor* getHomePlanet() const;
 
 private:
 

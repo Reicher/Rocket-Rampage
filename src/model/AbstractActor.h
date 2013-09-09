@@ -6,7 +6,7 @@
 
 namespace model {
 
-class AbstractActor
+class AbstractActor : public IActor
 {
 public:
 

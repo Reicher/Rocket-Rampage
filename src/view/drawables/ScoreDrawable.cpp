@@ -2,6 +2,7 @@
 #include "../../Content.h"
 #include "../../model/actors/ScoreActor.h"
 #include "SFML/Graphics/Text.hpp"
+#include <sstream>
 
 namespace view {
 
@@ -11,18 +12,27 @@ public:
 
 	Impl( ::model::ScoreActor* pScoreActor, Content* pContent )
 	: m_pScoreActor( pScoreActor )
-	, m_apScoreText( new sf::Text( "123", pContent->m_standardFont, 30 ) )
+	, m_apScoreText( new sf::Text( "Score: 0", pContent->m_standardFont, 30 ) )
 	{
 		m_apScoreText->setColor(sf::Color::White);
 	}
 
 	void draw( sf::RenderTarget& target, sf::RenderStates states ) const
 	{
-		m_apScoreText->setPosition( m_pScoreActor->getPosition().x, m_pScoreActor->getPosition().y );
+		m_apScoreText->setPosition( m_pScoreActor->getX(), m_pScoreActor->getY() );
+		m_apScoreText->setString(getScoreAsString());
 		target.draw(*m_apScoreText, states);
 	}
 
 private:
+
+	std::string getScoreAsString() const
+	{
+		std::ostringstream oss;
+		oss << m_pScoreActor->getScore();
+		oss << " Parsec";
+		return oss.str();
+	}
 
 	::model::ScoreActor* m_pScoreActor;
 

@@ -84,10 +84,12 @@ private:
 	void createManagers()
 	{
 		m_managers.push_back( new FuelManager( m_pObservable, m_apUniqueId.get() ) );
-		m_managers.push_back( new CosmosManager( m_pObservable, m_apUniqueId.get() ) );
-		m_managers.push_back( new ScoreManager( m_pObservable, m_apUniqueId.get() ) );
 
-		m_pPlayerManager = new PlayerManager( m_pObservable, m_apUniqueId.get() );
+		CosmosManager* pCosmosManager = new CosmosManager( m_pObservable, m_apUniqueId.get() );
+
+		m_managers.push_back( pCosmosManager );
+
+		m_pPlayerManager = new PlayerManager( m_pObservable, m_apUniqueId.get(), pCosmosManager );
 
 		m_managers.push_back( m_pPlayerManager );
 	}
