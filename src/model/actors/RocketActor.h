@@ -28,6 +28,17 @@ public:
 
 	void setThrustOn( bool thrust );
 
+	void setBackThrustOn( bool backThrust );
+
+	void setLeftThrustOn( bool leftThrust );
+
+	void setRightThrustOn( bool rightThrust );
+
+	void setCRotOn( bool cRot );
+
+	void setCCWRotOn( bool ccwRot );
+
+
 private:
 
 	class Impl;

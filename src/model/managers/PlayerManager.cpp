@@ -35,6 +35,37 @@ public:
 		 m_rocketActors[id]->setThrustOn( isOn );
 	 }
 
+	 void setThrustOn( bool isOn, int id )
+	 {
+		 m_rocketActors[id]->setThrustOn( isOn );
+	 }
+
+	 void setBackThrustOn( bool isOn, int id )
+	 {
+		 m_rocketActors[id]->setBackThrustOn( isOn );
+	 }
+
+	 void setLeftThrustOn( bool isOn, int id )
+	 {
+		 m_rocketActors[id]->setLeftThrustOn( isOn );
+	 }
+
+	 void setRightThrustOn( bool isOn, int id )
+	 {
+		 m_rocketActors[id]->setRightThrustOn( isOn );
+	 }
+
+	 void setCRotOn( bool isOn, int id )
+	 {
+		 m_rocketActors[id]->setCRotOn( isOn );
+	 }
+
+	 void setCCWRotOn( bool isOn, int id )
+	 {
+		 m_rocketActors[id]->setCCWRotOn( isOn );
+	 }
+
+
 private:
 
 	IObservable* m_pObservable;
@@ -65,6 +96,7 @@ private:
 
 		m_actors.push_back( pScoreActor );
 	}
+
 };
 
 PlayerManager::PlayerManager( IObservable* pObservable, IUniqueId* pUniqueId, CosmosManager* pCosmosManager  )
@@ -81,9 +113,34 @@ void PlayerManager::update( double dt )
 	m_apImpl->update( dt );
 }
 
-void PlayerManager::setRocketThrust( bool isOn, int id )
+void PlayerManager::setThrustOn( bool isOn, int id )
 {
-	m_apImpl->setRocketThrust( isOn, id );
+	m_apImpl->setThrustOn( isOn, id );
+}
+
+void PlayerManager::setBackThrustOn( bool isOn, int id )
+{
+	m_apImpl->setBackThrustOn( isOn, id );
+}
+
+void PlayerManager::setLeftThrustOn( bool isOn, int id )
+{
+	m_apImpl->setLeftThrustOn( isOn, id );
+}
+
+void PlayerManager::setRightThrustOn( bool isOn, int id )
+{
+	m_apImpl->setRightThrustOn( isOn, id );
+}
+
+void PlayerManager::setCRotOn( bool isOn, int id )
+{
+	m_apImpl->setCRotOn( isOn, id );
+}
+
+void PlayerManager::setCCWRotOn( bool isOn, int id )
+{
+	m_apImpl->setCCWRotOn( isOn, id );
 }
 
 }

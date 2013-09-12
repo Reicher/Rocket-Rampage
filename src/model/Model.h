@@ -22,7 +22,17 @@ public:
 	//! @param dt seconds elapsed since the last update call.
 	void update( float dt );
 
-	void setRocketThrust( bool isOn, int id );
+	void setThrustOn( bool thrust, int id );
+
+	void setBackThrustOn( bool backThrust, int id );
+
+	void setLeftThrustOn( bool leftThrust, int id );
+
+	void setRightThrustOn( bool rightThrust, int id );
+
+	void setCRotOn( bool cRot, int id );
+
+	void setCCWRotOn( bool ccwRot, int id );
 
 	//! Adds an observer to the model.
 	//!

@@ -21,7 +21,17 @@ public:
 
 	void update( double dt );
 
-	void setRocketThrust( bool isOn, int id );
+	void setThrustOn( bool thrust, int id );
+
+	void setBackThrustOn( bool backThrust, int id );
+
+	void setLeftThrustOn( bool leftThrust, int id );
+
+	void setRightThrustOn( bool rightThrust, int id );
+
+	void setCRotOn( bool cRot, int id );
+
+	void setCCWRotOn( bool ccwRot, int id );
 
 private:
 

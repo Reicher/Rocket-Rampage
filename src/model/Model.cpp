@@ -44,9 +44,34 @@ public:
 
 	}
 
-	void setRocketThrust( bool isOn, int id )
+	void setThrustOn( bool isOn, int id )
 	{
-		m_pPlayerManager->setRocketThrust( isOn, id );
+		m_pPlayerManager->setThrustOn( isOn, id );
+	}
+
+	void setBackThrustOn( bool isOn, int id )
+	{
+		m_pPlayerManager->setBackThrustOn( isOn, id );
+	}
+
+	void setLeftThrustOn( bool isOn, int id )
+	{
+		m_pPlayerManager->setLeftThrustOn( isOn, id );
+	}
+
+	void setRightThrustOn( bool isOn, int id )
+	{
+		m_pPlayerManager->setRightThrustOn( isOn, id );
+	}
+
+	void setCRotOn( bool isOn, int id )
+	{
+		m_pPlayerManager->setCRotOn( isOn, id );
+	}
+
+	void setCCWRotOn( bool isOn, int id )
+	{
+		m_pPlayerManager->setCCWRotOn( isOn, id );
 	}
 
 
@@ -115,9 +140,34 @@ void Model::update( float dt )
 	return m_apImpl->update( dt );
 }
 
-void Model::setRocketThrust( bool isOn, int id )
+void Model::setThrustOn( bool isOn, int id )
 {
-	m_apImpl->setRocketThrust( isOn, id );
+	m_apImpl->setThrustOn( isOn, id );
+}
+
+void Model::setBackThrustOn( bool isOn, int id )
+{
+	m_apImpl->setBackThrustOn( isOn, id );
+}
+
+void Model::setLeftThrustOn( bool isOn, int id )
+{
+	m_apImpl->setLeftThrustOn( isOn, id );
+}
+
+void Model::setRightThrustOn( bool isOn, int id )
+{
+	m_apImpl->setRightThrustOn( isOn, id );
+}
+
+void Model::setCRotOn( bool isOn, int id )
+{
+	m_apImpl->setCRotOn( isOn, id );
+}
+
+void Model::setCCWRotOn( bool isOn, int id )
+{
+	m_apImpl->setCCWRotOn( isOn, id );
 }
 
 void Model::addObserver( IObserver* pObserver )

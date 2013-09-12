@@ -5,6 +5,8 @@
 
 namespace view {
 
+const bool ViewFollowRotation = true;
+
 class RocketDrawable::Impl
 {
 public:
@@ -30,7 +32,11 @@ public:
 	void draw( ::sf::RenderTarget& target, ::sf::RenderStates states ) const
 	{
 		m_apSprite->setPosition(m_pActor->getX(), m_pActor->getY());
+		m_apSprite->setRotation(m_pActor->getRotation());
+
 		m_pView->setCenter(m_pActor->getX(), m_pActor->getY());
+		if(ViewFollowRotation)
+			m_pView->setRotation(m_pActor->getRotation());
 
 		target.draw( *m_apSprite, states );
 	}

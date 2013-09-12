@@ -83,7 +83,22 @@ private:
 		switch( code )
 		{
 		case ::sf::Keyboard::W:
-			m_model.setRocketThrust( true, 0 );
+			m_model.setThrustOn( true, 0 );
+		break;
+		case ::sf::Keyboard::S:
+			m_model.setBackThrustOn( true, 0 );
+		break;
+		case ::sf::Keyboard::A:
+			m_model.setLeftThrustOn( true, 0 );
+		break;
+		case ::sf::Keyboard::D:
+			m_model.setRightThrustOn( true, 0 );
+		break;
+		case ::sf::Keyboard::Q:
+			m_model.setCCWRotOn( true, 0 );
+		break;
+		case ::sf::Keyboard::E:
+			m_model.setCRotOn( true, 0 );
 		break;
 
 		default:
@@ -95,12 +110,27 @@ private:
 	{
 		switch( code )
 		{
-			case ::sf::Keyboard::W:
-				m_model.setRocketThrust( false, 0 );
-			break;
+		case ::sf::Keyboard::W:
+			m_model.setThrustOn( false, 0 );
+		break;
+		case ::sf::Keyboard::S:
+			m_model.setBackThrustOn( false, 0 );
+		break;
+		case ::sf::Keyboard::A:
+			m_model.setLeftThrustOn( false, 0 );
+		break;
+		case ::sf::Keyboard::D:
+			m_model.setRightThrustOn( false, 0 );
+		break;
+		case ::sf::Keyboard::Q:
+			m_model.setCCWRotOn( false, 0 );
+		break;
+		case ::sf::Keyboard::E:
+			m_model.setCRotOn( false, 0 );
+		break;
 
-			default:
-			break;
+		default:
+		break;
 		}
 	}
 };
