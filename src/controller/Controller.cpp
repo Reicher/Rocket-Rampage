@@ -1,6 +1,7 @@
 #include "Controller.h"
 #include "../model/Model.h"
 #include "../view/View.h"
+#include "../audio/Audio.h"
 #include "../Content.h"
 
 namespace controller {
@@ -11,6 +12,7 @@ public:
 	Impl()
 	: m_content()
 	, m_model()
+	, m_audio( &m_content )
 	, m_view( &m_content )
 	, m_isGameOn( true )
 	, m_viewEvent()
@@ -18,6 +20,7 @@ public:
 		m_view.init();
 
 		m_model.addObserver( &m_view );
+		m_model.addObserver( &m_audio );
 
 		m_model.init();
 	}
@@ -66,6 +69,8 @@ private:
 	Content m_content;
 
 	::model::Model m_model;
+
+	::audio::Audio m_audio;
 
 	::view::View m_view;
 
