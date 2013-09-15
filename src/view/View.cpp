@@ -7,6 +7,7 @@
 #include "../model/actors/PlanetActor.h"
 #include "../model/actors/ScoreActor.h"
 #include "drawables/RocketDrawable.h"
+#include "drawables/FuelMeterDrawable.h"
 #include <SFML/Graphics.hpp>
 #include <map>
 
@@ -62,6 +63,7 @@ public:
 			break;
 		case model::EV_ADD_ROCKET:
 			handleAddRocket( e.getValue() );
+			handleAddFuelMeter( e.getValue() );
 		default:
 			break;
 		}
@@ -109,6 +111,18 @@ public:
 		{
 			model::RocketActor* pActor = boost::any_cast<model::RocketActor*>( value );
 			m_gameDrawables.insert( DrawableMap::value_type( pActor->getId(), new RocketDrawable( pActor, m_pContent, &m_gameView ) ) );
+		}
+		catch ( const boost::bad_any_cast& )
+		{
+		}
+	}
+
+	void handleAddFuelMeter( const boost::any& value )
+	{
+		try
+		{
+			model::RocketActor* pActor = boost::any_cast<model::RocketActor*>( value );
+			m_guiDrawables.insert( DrawableMap::value_type( pActor->getId(), new FuelMeterDrawable( pActor, m_pContent ) ) );
 		}
 		catch ( const boost::bad_any_cast& )
 		{

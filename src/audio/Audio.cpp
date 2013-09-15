@@ -11,6 +11,11 @@ public:
 	Impl( Content* pContent )
 	: m_pContent( pContent )
 	{
+
+		//for now...
+		m_pContent->m_mainTheme.play();
+		m_pContent->m_mainTheme.setLoop(true);
+		m_pContent->m_mainTheme.setVolume(75);
 	}
 
 	void init()

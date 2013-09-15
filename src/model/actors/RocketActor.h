@@ -38,6 +38,8 @@ public:
 
 	void setCCWRotOn( bool ccwRot );
 
+	double getFuel( );
+
 
 private:
 

@@ -162,6 +162,11 @@ public:
 		m_ccwRot= ccwRot;
 	}
 
+	double getFuel()
+	{
+		return m_fuel;
+	}
+
 
 private:
 
@@ -257,6 +262,11 @@ void RocketActor::setCRotOn( bool cRot )
 void RocketActor::setCCWRotOn( bool ccwRot )
 {
 	m_apImpl->setCCWRotOn(ccwRot );
+}
+
+double RocketActor::getFuel( )
+{
+	return m_apImpl->getFuel();
 }
 
 }
