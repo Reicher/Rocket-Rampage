@@ -68,13 +68,13 @@ public:
 
 		// Clockwise rotation
 		if(m_cRot && haveFuel){
-			m_fr += 1.0 * speedMulti;
+			m_fr += 0.5 * speedMulti;
 			m_fuel -= dt;
 		}
 
 		// Counter Clockwise rotation
 		if(m_ccwRot && haveFuel){
-			m_fr -= 1.0 * speedMulti;
+			m_fr -= 0.5 * speedMulti;
 			m_fuel -= dt;
 		}
 
@@ -102,9 +102,26 @@ public:
 		//rotation
 		m_vr += m_ar;
 
+		slowDown(dt);
+
 		// Calculate position
 		m_position += m_v * dt;
 		m_rotation += m_vr * dt;
+	}
+
+	void slowDown(double dt)
+	{
+		// Have these two be the users choice later and draw fuel?
+		bool cancelingMovement = true;
+		bool cancelingRotation = true;
+
+		if(cancelingRotation)
+			m_vr *= (1.0 - dt);
+
+		if(cancelingMovement){
+			m_v.x *= (1.0 - dt);
+			m_v.y *= (1.0- dt);
+		}
 	}
 
 	ActorId getId()
