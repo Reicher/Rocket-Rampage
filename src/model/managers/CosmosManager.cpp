@@ -36,6 +36,11 @@ public:
 		return m_pHomePlanet;
 	}
 
+	std::vector<IActor*> getAll()
+	{
+		return m_actors;
+	}
+
 private:
 
 	IObservable* m_pObservable;
@@ -81,6 +86,11 @@ void CosmosManager::update( double dt )
 IActor* CosmosManager::getHomePlanet() const
 {
 	return m_apImpl->getHomePlanet();
+}
+
+std::vector<IActor*> CosmosManager::getAll() const
+{
+	return m_apImpl->getAll();
 }
 
 }

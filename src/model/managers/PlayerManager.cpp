@@ -1,6 +1,7 @@
 #include "PlayerManager.h"
 #include "../actors/RocketActor.h"
 #include "../actors/ScoreActor.h"
+#include "../actors/PlanetActor.h"
 #include "../managers/CosmosManager.h"
 #include "../IActorFwd.h"
 #include "../Vector2.h"
@@ -22,10 +23,13 @@ public:
 
 	void update( double dt )
 	{
-		for( Actors::iterator it( m_actors.begin() );
-			 it != m_actors.end();
+		// I have completely ditched the m_actor here..
+		// dont really know how to use it
+		for( RocketActors::iterator it( m_rocketActors.begin() );
+			 it != m_rocketActors.end();
 			 ++it )
 		{
+			handleGravity(*it);
 			(*it)->update( dt );
 		}
 	}
@@ -95,6 +99,24 @@ private:
 		m_actors.push_back( pRocketActor );
 
 		m_actors.push_back( pScoreActor );
+	}
+
+	void handleGravity(RocketActor* rocket)
+	{
+		Vector2 pos = Vector2(rocket->getX(), rocket->getY());
+		float G = 100.0;
+
+		IActor* homePlanet = m_pCosmosManager->getHomePlanet();
+		double mass = homePlanet->getSize();
+
+		Vector2 V = Vector2(homePlanet->getX(), homePlanet->getY()) - pos;
+		double distance = V.getLength();
+
+		double forceBetween = G * (rocket->getMass() * mass) /  pow(distance, 2);
+		V.normalize();
+		V = V * forceBetween;
+
+		rocket->setForce(V);
 	}
 
 };

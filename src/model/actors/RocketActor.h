@@ -40,6 +40,10 @@ public:
 
 	double getFuel( );
 
+	double getMass();
+
+	void setForce(Vector2 force);
+
 
 private:
 

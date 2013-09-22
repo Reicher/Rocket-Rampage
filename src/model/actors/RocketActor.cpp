@@ -28,6 +28,7 @@ public:
 	, m_cRot( false )
 	, m_ccwRot( false )
 	, m_fuel(10.0)
+	, m_externalForce(0, 0)
 	{
 	}
 
@@ -84,7 +85,7 @@ public:
 
 	void update( double dt )
 	{
-		m_f = Vector2(0.0, 0.0);
+		m_f = m_externalForce;
 		m_fr = 0.0;
 
 		// Fuel is heavy!
@@ -184,6 +185,15 @@ public:
 		return m_fuel;
 	}
 
+	void addExternalForce(Vector2 force)
+	{
+		m_externalForce = force;
+	}
+
+	double getMass()
+	{
+		return m_mass;
+	}
 
 private:
 
@@ -210,6 +220,8 @@ private:
 	bool m_ccwRot;
 
 	double m_fuel;
+
+	Vector2 m_externalForce;
 };
 
 RocketActor::RocketActor( ActorId id, Vector2 position )
@@ -284,6 +296,16 @@ void RocketActor::setCCWRotOn( bool ccwRot )
 double RocketActor::getFuel( )
 {
 	return m_apImpl->getFuel();
+}
+
+void RocketActor::setForce(Vector2 force)
+{
+	m_apImpl->addExternalForce(force);
+}
+
+double RocketActor::getMass()
+{
+	return m_apImpl->getMass();
 }
 
 }

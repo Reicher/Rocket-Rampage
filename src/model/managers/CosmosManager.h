@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <math.h>
+#include <vector>
 
 #include "../IManager.h"
 #include "../IObservable.h"
@@ -23,6 +24,8 @@ public:
 	void update( double dt );
 
 	IActor* getHomePlanet() const;
+
+	std::vector<IActor*> getAll() const;
 
 private:
 
